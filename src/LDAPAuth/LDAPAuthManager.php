@@ -22,7 +22,7 @@ class LDAPAuthManager extends Auth\AuthManager {
     {
         $provider = $this->createLDAPProvider();
         
-        return new Guard($provider, $this->app['session']);
+        return new Auth\Guard($provider, $this->app['session']);
     }
     
     /**
