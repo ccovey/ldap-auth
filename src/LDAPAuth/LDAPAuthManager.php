@@ -8,9 +8,11 @@
 
 namespace LDAPAuth;
 
+use Illuminate\Auth as Auth;
+
 use adLDAP;
 
-class LDAPAuthManager extends Illuminate\Auth\AuthManager {
+class LDAPAuthManager extends Auth\AuthManager {
     
     /**
      * 
