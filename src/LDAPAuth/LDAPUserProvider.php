@@ -9,6 +9,8 @@ namespace LDAPAuth;
 
 use adLDAP;
 
+use Illuminate\Auth;
+
 class LDAPUserProvider implements Illuminate\Auth\UserProviderInterface {
     
     protected $ad;
