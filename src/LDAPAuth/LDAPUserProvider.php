@@ -34,17 +34,18 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
         
         foreach ($userList as $user) {
             if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
-                $users[] = substr(explode(',', $user['distinguishedname'][0])[0], 3);
+                $name = explode(',', $user['distinguishedname'][0]);
+                $users[] = substr($name[0], 3);
             }
         }
         
-        $info = [
+        $info = array(
             'id'       => $infoCollection->samaccountname,
             'username' => $infoCollection->displayname,
             'email'    => $infoCollection->mail,
             'groups'   => $infoCollection->memberOf,
             'userList' => $users
-        ];
+        );
         
         if (isset($infoCollection)) {
             return new Auth\GenericUser((array) $info);
@@ -65,17 +66,18 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
         
         foreach ($userList as $user) {
             if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
-                $users[] = substr(explode(',', $user['distinguishedname'][0])[0], 3);
+                $name = explode(',', $user['distinguishedname'][0]);
+                $users[] = substr($name[0], 3);
             }
         }
         
-        $info = [
+        $info = array(
             'id'       => $infoCollection->samaccountname,
             'username' => $infoCollection->displayname,
             'email'    => $infoCollection->mail,
             'groups'   => $infoCollection->memberOf,
             'userList' => $users
-        ];
+        );
         
         if (isset($infoCollection)) {
             return new Auth\GenericUser((array) $info);
