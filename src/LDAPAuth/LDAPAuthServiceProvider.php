@@ -19,7 +19,7 @@ class LDAPAuthServiceProvider extends Auth\AuthServiceProvider{
 			// know that we need to set any queued cookies in the after event later.
 			$app['auth.loaded'] = true;
 
-			return new LDAPAuth\LDAPAuthManager($app);
+			return new LDAPAuthManager($app);
 		});
 	}
 }
