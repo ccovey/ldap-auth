@@ -7,9 +7,9 @@
  */
 namespace LDAPAuth;
 
-use Illuminate\Auth;
+use Illuminate\Auth as Auth;
 
-class LDAPAuthServiceProvider extends Illuminate\Auth\AuthServiceProvider{
+class LDAPAuthServiceProvider extends Auth\AuthServiceProvider{
     public function register()
 	{
 		$this->app['auth'] = $this->app->share(function($app)
@@ -19,7 +19,7 @@ class LDAPAuthServiceProvider extends Illuminate\Auth\AuthServiceProvider{
 			// know that we need to set any queued cookies in the after event later.
 			$app['auth.loaded'] = true;
 
-			return new Ccovey\LDAPAuth\LDAPAuthManager($app);
+			return new LDAPAuth\LDAPAuthManager($app);
 		});
 	}
 }
