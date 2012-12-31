@@ -47,7 +47,7 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
         ];
         
         if (isset($infoCollection)) {
-            return new GenericUser((array) $info);
+            return new Auth\GenericUser((array) $info);
         }
     }
 
@@ -78,7 +78,7 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
         ];
         
         if (isset($infoCollection)) {
-            return new GenericUser((array) $info);
+            return new Auth\GenericUser((array) $info);
         }
     }
 
@@ -89,7 +89,7 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
 	 * @param  array  $credentials
 	 * @return bool
 	 */
-	public function validateCredentials(UserInterface $user, array $credentials)
+	public function validateCredentials(Auth\UserInterface $user, array $credentials)
     {
         return $this->ad->authenticate($credentials['username'], $credentials['password']);
     }
