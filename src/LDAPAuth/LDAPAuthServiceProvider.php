@@ -5,7 +5,7 @@
  *
  * @author ccovey
  */
-namespace Ccovey\LDAPAuth;
+namespace LDAPAuth;
 
 use Illuminate\Auth;
 
