@@ -1,5 +1,5 @@
 {
-    "name": "ccovey/ldapAuth",
+    "name": "ccovey/ldap-auth",
     "type": "library",
     "description": "LDAP Auth Driver for use in Laravel 4",
     "keywords": ["L4", "LDAP", "LDAP Authentication", "Laravel 4", "Laravel"],
