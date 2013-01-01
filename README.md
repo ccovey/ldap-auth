@@ -11,7 +11,7 @@ Current implementation returns user display name, user login name, groups the us
 as all users in the `Departments` User group. This will be changed shortly for more customizable user list returns.
 
 To install simply add 
-`ccovey/ldap-aut` to the `require` section of your Laravel 4 composer.json file.
+`ccovey/ldap-auth` to the `require` section of your Laravel 4 composer.json file.
 
 Then go to config/app.php and change `Illuminate\Auth\AuthServiceProvider` to `LDAPAuth\LDAPAuthServiceProvider`
 
