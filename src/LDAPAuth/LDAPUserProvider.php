@@ -35,7 +35,10 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
         foreach ($userList as $user) {
             if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
                 $name = explode(',', $user['distinguishedname'][0]);
-                $users[] = substr($name[0], 3);
+                $user = substr($name[0], 3);
+                if(!preg_match('Group', $user)) {
+                    $users[] = $user;
+                }
             }
         }
         
