@@ -36,7 +36,7 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
             if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
                 $name = explode(',', $user['distinguishedname'][0]);
                 $user = substr($name[0], 3);
-                if(!preg_match('Group', $user)) {
+                if(!preg_match('/Group/', $user)) {
                     $users[] = $user;
                 }
             }
