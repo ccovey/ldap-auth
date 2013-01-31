@@ -8,11 +8,12 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
+         syntaxCheck="true"
 >
     <testsuites>
         <testsuite name="Package Test Suite">
             <directory>./tests/</directory>
+            <file>TestLdapAuthUserProvider.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
