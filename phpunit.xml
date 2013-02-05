@@ -12,8 +12,7 @@
 >
     <testsuites>
         <testsuite name="Package Test Suite">
-            <directory>./tests/</directory>
-            <file>TestLdapAuthUserProvider.php</file>
+            <directory suffix=".php">tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

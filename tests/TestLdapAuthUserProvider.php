@@ -1,7 +1,7 @@
 <?php
-error_reporting(E_ALL);
-//use Mockery as m;
 use Ccovey\LdapAuth;
+use adLDAP\adLDAP;
+use Illuminate\Auth;
 
 /**
 * 
@@ -12,7 +12,20 @@ class TestLdapAuthUserProvider extends PHPUnit_Framework_TestCase
 	{
 		$this->credentials = ['username' => 'user', 'password' => 'password'];
 
-		//$this->ad = Mockery::mock('adLDAP\adLdap');
+		$this->ad = $this->getMockBuilder('adLDAP\adLDAP')
+			->setMethods(['authenticate'])
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->ad->expects($this->atLeastOnce())
+			->method('authenticate')
+			->will($this->returnValue(true));
+
+		$this->credentials = array('username' => 'user', 'password' => 'password');
+
+		$this->user = $this->getMockBuilder('Illuminate\Auth\UserInterface')
+			->disableOriginalConstructor()
+			->getMock();
 	}
 
 	public function tearDown()
@@ -23,7 +36,7 @@ class TestLdapAuthUserProvider extends PHPUnit_Framework_TestCase
 
 	public function testValidateCreditialsReturnsTrue()
 	{
-		//$user = new LdapAuthUserProvider();
-		$this->assertTrue(true);
+		$user = new LdapAuth\LdapAuthUserProvider($this->ad);
+		$this->assertTrue($user->validateCredentials($this->user, $this->credentials));
 	}
 }

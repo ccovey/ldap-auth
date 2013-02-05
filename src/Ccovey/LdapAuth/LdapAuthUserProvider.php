@@ -1,6 +1,7 @@
 <?php namespace Ccovey\LdapAuth;
 
 use Illuminate\Auth;
+use adLDAP\adLDAP;
 
 /**
  * Class to build array to send to GenericUser
@@ -21,7 +22,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * 
      * @param adLDAP\adLDAP $conn
      */
-    public function __construct(adLDAP\adLDAP $conn)
+    public function __construct(adLDAP $conn)
     {
         $this->ad = $conn;
     }

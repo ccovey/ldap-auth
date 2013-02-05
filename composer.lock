@@ -8,12 +8,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/illuminate/auth",
-                "reference": "132256583520daeb151872e67611a00d84894395"
+                "reference": "ca08999c5c6158af3853cf4eedebb2c1081485bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/illuminate/auth/archive/132256583520daeb151872e67611a00d84894395.zip",
-                "reference": "132256583520daeb151872e67611a00d84894395",
+                "url": "https://api.github.com/repos/illuminate/auth/zipball/ca08999c5c6158af3853cf4eedebb2c1081485bc",
+                "reference": "ca08999c5c6158af3853cf4eedebb2c1081485bc",
                 "shasum": ""
             },
             "require": {
@@ -27,16 +27,16 @@
                 "illuminate/http": "4.0.x"
             },
             "require-dev": {
-                "illuminate/routing": "4.0.x"
+                "illuminate/routing": "4.0.x",
+                "illuminate/console": "4.0.x"
             },
-            "time": "2013-01-29 04:27:47",
+            "time": "2013-02-02 19:33:21",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Auth": ""
@@ -80,7 +80,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Cache": ""
@@ -119,7 +118,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Container": ""
@@ -140,12 +138,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/illuminate/cookie",
-                "reference": "de3e5bdf96d6973d5ba2813c74c1cbb2e5a66590"
+                "reference": "c5232436dd58a6ac883ec5f7767cd2cacf32664f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/illuminate/cookie/archive/de3e5bdf96d6973d5ba2813c74c1cbb2e5a66590.zip",
-                "reference": "de3e5bdf96d6973d5ba2813c74c1cbb2e5a66590",
+                "url": "https://api.github.com/repos/illuminate/cookie/zipball/c5232436dd58a6ac883ec5f7767cd2cacf32664f",
+                "reference": "c5232436dd58a6ac883ec5f7767cd2cacf32664f",
                 "shasum": ""
             },
             "require": {
@@ -157,14 +155,13 @@
             "require-dev": {
                 "mockery/mockery": "0.7.2"
             },
-            "time": "2013-01-11 15:52:49",
+            "time": "2013-02-01 16:50:10",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Cookie": ""
@@ -186,12 +183,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/illuminate/database",
-                "reference": "447eca62de2704a86f62f8c405501fe10f52af5f"
+                "reference": "54a0c9834f2402917502ec45f302380e9f7e22f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/447eca62de2704a86f62f8c405501fe10f52af5f",
-                "reference": "447eca62de2704a86f62f8c405501fe10f52af5f",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/54a0c9834f2402917502ec45f302380e9f7e22f3",
+                "reference": "54a0c9834f2402917502ec45f302380e9f7e22f3",
                 "shasum": ""
             },
             "require": {
@@ -209,14 +206,13 @@
             "suggest": {
                 "illuminate/events": "Allows for catching of database query events."
             },
-            "time": "2013-01-31 02:14:20",
+            "time": "2013-02-03 18:23:15",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Database": ""
@@ -263,7 +259,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Encryption": ""
@@ -309,7 +304,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Events": ""
@@ -350,7 +344,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Filesystem": ""
@@ -392,7 +385,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Hashing": ""
@@ -419,12 +411,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/illuminate/http",
-                "reference": "d00a188a1d06b50ecd48a6689fa6e43fd8c56c1d"
+                "reference": "adeae36e821c46a2cce0dfd4b41d0776a0609ae6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/illuminate/http/archive/d00a188a1d06b50ecd48a6689fa6e43fd8c56c1d.zip",
-                "reference": "d00a188a1d06b50ecd48a6689fa6e43fd8c56c1d",
+                "url": "https://api.github.com/repos/illuminate/http/zipball/adeae36e821c46a2cce0dfd4b41d0776a0609ae6",
+                "reference": "adeae36e821c46a2cce0dfd4b41d0776a0609ae6",
                 "shasum": ""
             },
             "require": {
@@ -435,14 +427,13 @@
             "require-dev": {
                 "mockery/mockery": "0.7.2"
             },
-            "time": "2013-01-23 22:45:13",
+            "time": "2013-02-03 18:26:11",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Http": ""
@@ -488,7 +479,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Redis": ""
@@ -512,12 +502,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/illuminate/session",
-                "reference": "1a7270f465963d7c6ce92e9f7e75a24fd56e572e"
+                "reference": "fefce40e8e20a583485b23d0ca8923f6489d8c17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/illuminate/session/archive/1a7270f465963d7c6ce92e9f7e75a24fd56e572e.zip",
-                "reference": "1a7270f465963d7c6ce92e9f7e75a24fd56e572e",
+                "url": "https://api.github.com/repos/illuminate/session/zipball/fefce40e8e20a583485b23d0ca8923f6489d8c17",
+                "reference": "fefce40e8e20a583485b23d0ca8923f6489d8c17",
                 "shasum": ""
             },
             "require": {
@@ -531,16 +521,16 @@
                 "illuminate/support": "4.0.x"
             },
             "require-dev": {
-                "mockery/mockery": ">=0.7.2"
+                "mockery/mockery": ">=0.7.2",
+                "illuminate/console": "4.0.x"
             },
-            "time": "2013-01-24 22:17:41",
+            "time": "2013-02-02 22:16:50",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Session": ""
@@ -580,7 +570,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Illuminate\\Support": ""
@@ -614,7 +603,6 @@
             },
             "time": "2013-01-14 16:49:31",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "files": [
                     "lib/password.php"
@@ -645,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "v2.2.0-BETA2"
+                "reference": "b07286109b0dd00dfbdedc943a5e133a2609d958"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/v2.2.0-BETA2.zip",
-                "reference": "v2.2.0-BETA2",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/b07286109b0dd00dfbdedc943a5e133a2609d958",
+                "reference": "b07286109b0dd00dfbdedc943a5e133a2609d958",
                 "shasum": ""
             },
             "require": {
@@ -663,14 +651,13 @@
                 "symfony/dependency-injection": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "2013-01-17 15:25:59",
+            "time": "2013-01-31 21:39:01",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\EventDispatcher\\": ""
@@ -700,25 +687,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "v2.2.0-BETA2"
+                "reference": "d60ca41ca09d22f3e59f02cb6cde9a8810a9e0f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/v2.2.0-BETA2.zip",
-                "reference": "v2.2.0-BETA2",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d60ca41ca09d22f3e59f02cb6cde9a8810a9e0f7",
+                "reference": "d60ca41ca09d22f3e59f02cb6cde9a8810a9e0f7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-21 16:56:55",
+            "time": "2013-02-04 12:42:02",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\HttpFoundation\\": ""
