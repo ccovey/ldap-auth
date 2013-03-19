@@ -63,27 +63,28 @@ class LDAPUserProvider implements Auth\UserProviderInterface {
 	 */
 	public function retrieveByCredentials(array $credentials)
     {
-        $infoCollection = $this->ad->user()->infoCollection($credentials["username"]);
-        $userList = $this->ad->folder()->listing(array('Departments'));
-        unset($userList['count']);
-        
-        foreach ($userList as $user) {
-            if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
-                $name = explode(',', $user['distinguishedname'][0]);
-                $users[] = substr($name[0], 3);
+        if ($infoCollection = $this->ad->user()->infoCollection($credentials["username"])){
+            $userList = $this->ad->folder()->listing(array('Departments'));
+            unset($userList['count']);
+
+            foreach ($userList as $user) {
+                if (substr($user['distinguishedname'][0], 0, 3) !== 'OU=') {
+                    $name = explode(',', $user['distinguishedname'][0]);
+                    $users[] = substr($name[0], 3);
+                }
             }
-        }
-        
-        $info = array(
-            'id'       => $infoCollection->samaccountname,
-            'username' => $infoCollection->displayname,
-            'email'    => $infoCollection->mail,
-            'groups'   => $infoCollection->memberOf,
-            'userList' => $users
-        );
-        
-        if (isset($infoCollection)) {
-            return new Auth\GenericUser((array) $info);
+
+            $info = array(
+                'id'       => $infoCollection->samaccountname,
+                'username' => $infoCollection->displayname,
+                'email'    => $infoCollection->mail,
+                'groups'   => $infoCollection->memberOf,
+                'userList' => $users
+            );
+
+            if (isset($infoCollection)) {
+                return new Auth\GenericUser((array) $info);
+            }
         }
     }
 
