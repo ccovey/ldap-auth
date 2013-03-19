@@ -79,7 +79,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* If you have 'user' => 'username' it will set the $info['user'] = $infoCollection->username
 		* refer to the adLDAP docs for which fields are available.
     	*/
-        foreach (Config::get('auth.fields') as $k => $field) {
+        foreach (\Config::get('auth.fields') as $k => $field) {
             $info[$k] = $infoCollection->$field;
         }
         
@@ -88,8 +88,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* Set userlist to true in app/auth.php and set a table in app/auth.php as well
 		* The table is the OU in Active directory you need a list of.
         */
-        if ($this->app['config']['auth.userlist'] === true) {
-            $info['userlist'] = $this->ad->folder()->listing(array($this->app['auth.table']));
+        if (\Config::has('auth.userlist')) {
+            $info['userlist'] = $this->ad->folder()->listing(array(\Config::get('auth.table')));
         }
         
         return $info;
