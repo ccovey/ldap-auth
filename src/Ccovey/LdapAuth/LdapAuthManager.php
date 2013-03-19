@@ -1,7 +1,8 @@
 <?php namespace Ccovey\LdapAuth;
 
 use Illuminate\Auth;
-use Illuminate\Support\Manager;
+
+use adLDAP\adLDAP;
 
 /**
 * 
@@ -25,7 +26,7 @@ class LdapAuthManager extends Auth\AuthManager
      */
     protected function createLdapProvider()
     {
-        $ad = new adLDAP\adLDAP();
+        $ad = new adLDAP();
         
         return new LdapUserProvider($ad);
     }
