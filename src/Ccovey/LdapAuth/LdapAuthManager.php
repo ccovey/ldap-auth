@@ -28,6 +28,6 @@ class LdapAuthManager extends Auth\AuthManager
     {
         $ad = new adLDAP();
         
-        return new LdapUserProvider($ad);
+        return new LdapAuthUserProvider($ad);
     }
 }
