@@ -43,13 +43,15 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByID($identifier)
     {
+        $infoCollection = $this->ad->user()->infoCollection($identifier);
+
+        $ldapUserInfo = $this->setInfoArray($infoCollection);
+
         if ($this->model) {
             $model = $this->createModel()->newQuery()->find($identifier);
             
-            var_dump($model);
+            return $this->addLdapToModel($model, $ldapUserInfo);
         }
-        
-        $infoCollection = $this->ad->user()->infoCollection($identifier);
         
         if (isset($infoCollection)) {
             return new Auth\GenericUser((array) $this->setInfoArray($infoCollection));
@@ -90,7 +92,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     	/*
 		* in app/auth.php set the fields array with each value
 		* as a field you want from active directory
-		* If you have 'user' => 'username' it will set the $info['user'] = $infoCollection->username
+		* If you have 'user' => 'samaccountname' it will set the $info['user'] = $infoCollection->samaccountname
 		* refer to the adLDAP docs for which fields are available.
     	*/
         if (\Config::has('auth.fields')) {
@@ -99,7 +101,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
         }else{
             //if no fields array present default to username and displayName
-            $info['username'] = $infoCollection->username;
+            $info['username'] = $infoCollection->samaccountname;
             $info['displayname'] = $infoCollection->displayName;
         }
         
@@ -114,10 +116,18 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         
         return $info;
     }
-    
+
     protected function createModel()
     {   
         $model = '\\' . ltrim($this->model, '\\');
+        
         return new $model;
+    }
+
+    protected function addLdapToModel($model, $ldap)
+    {
+        $combined = $model->getAttributes() + $ldap;
+
+        return $model->fill($combined);
     }
 }
