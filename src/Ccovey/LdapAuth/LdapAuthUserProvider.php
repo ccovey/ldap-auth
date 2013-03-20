@@ -71,7 +71,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param adLDAP\adLDAP $infoCollection
      * @return array $info
      */
-    protected function setInfoArray(adLDAP\collections\adLDAPUserCollection $infoCollection)
+    protected function setInfoArray(\adLDAP\collections\adLDAPUserCollection $infoCollection)
     {
     	/*
 		* in app/auth.php set the fields array with each value
