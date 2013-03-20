@@ -1,7 +1,7 @@
 <?php namespace Ccovey\LdapAuth;
 
 use Illuminate\Auth;
-use adLDAP\adLDAP;
+use adLDAP;
 
 /**
  * Class to build array to send to GenericUser
@@ -18,13 +18,21 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     protected $ad;
     
     /**
+     *
+     * @var type string
+     */
+    protected $model;
+    
+    /**
      * DI in adLDAP object for use throughout
      * 
      * @param adLDAP\adLDAP $conn
      */
-    public function __construct(adLDAP $conn)
+    public function __construct(adLDAP\adLDAP $conn, $model = null)
     {
         $this->ad = $conn;
+        
+        $this->model = $model;
     }
 
     /**
@@ -35,6 +43,12 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByID($identifier)
     {
+        if ($this->model) {
+            $model = $this->createModel()->newQuery()->find($identifier);
+            
+            var_dump($model);
+        }
+        
         $infoCollection = $this->ad->user()->infoCollection($identifier);
         
         if (isset($infoCollection)) {
@@ -71,7 +85,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param adLDAP\adLDAP $infoCollection
      * @return array $info
      */
-    protected function setInfoArray(\adLDAP\collections\adLDAPUserCollection $infoCollection)
+    protected function setInfoArray(adLDAP\collections\adLDAPUserCollection $infoCollection)
     {
     	/*
 		* in app/auth.php set the fields array with each value
@@ -79,20 +93,31 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* If you have 'user' => 'username' it will set the $info['user'] = $infoCollection->username
 		* refer to the adLDAP docs for which fields are available.
     	*/
-        foreach (\Config::get('auth.fields') as $k => $field) {
-            $info[$k] = $infoCollection->$field;
+        if (\Config::has('auth.fields')) {
+            foreach (\Config::get('auth.fields') as $k => $field) {
+                $info[$k] = $infoCollection->$field;
+            }
+        }else{
+            //if no fields array present default to username and displayName
+            $info['username'] = $infoCollection->username;
+            $info['displayname'] = $infoCollection->displayName;
         }
         
         /*
 		* I needed a user list to populate a dropdown
-		* Set userlist to true in app/auth.php and set a table in app/auth.php as well
+		* Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
 		* The table is the OU in Active directory you need a list of.
         */
         if (\Config::has('auth.userlist')) {
-            $info['userlist'] = $this->ad->folder()->listing(array(\Config::get('auth.table')));
+            $info['userlist'] = $this->ad->folder()->listing(array(\Config::get('auth.group')));
         }
         
         return $info;
     }
-
+    
+    protected function createModel()
+    {   
+        $model = '\\' . ltrim($this->model, '\\');
+        return new $model;
+    }
 }

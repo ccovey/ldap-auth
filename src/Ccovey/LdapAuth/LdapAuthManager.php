@@ -28,6 +28,10 @@ class LdapAuthManager extends Auth\AuthManager
     {
         $ad = new adLDAP();
         
-        return new LdapAuthUserProvider($ad);
+        if ($this->app['config']['auth.model']) {
+            $model = $this->app['config']['auth.model'];
+        }
+        
+        return new LdapAuthUserProvider($ad, $model);
     }
 }
