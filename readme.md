@@ -26,9 +26,9 @@ Open `config/app.php` and find
 
 and replace it with
 
-`Ccovey\LdapAuthServiceProvider`
+`Ccovey\LdapAuth\LdapAuthServiceProvider`
 
-This tell Laravel 4 to use the service provider from the vendor folder.
+This tells Laravel 4 to use the service provider from the vendor folder.
 
 Use of `Auth` is the same as with the default service provider.
 
