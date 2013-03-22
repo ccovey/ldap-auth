@@ -10,7 +10,7 @@ To install this in your application add the following to your `composer.json` fi
 
 ```json
 require {
-	"ccovey/ldap-auth": "dev-master",
+	"ccovey/ldap-auth": "dev-develop",
 }
 ```
 
@@ -32,7 +32,7 @@ This tells Laravel 4 to use the service provider from the vendor folder.
 
 Use of `Auth` is the same as with the default service provider.
 
-By Default this will have the `username`, `groups`, and `displayname`
+By Default this will have the `username`, and `displayname`
 
 To edit what is returned you can specify in `config/auth.php` under the `fields` key.
 
