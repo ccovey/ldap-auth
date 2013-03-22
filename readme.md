@@ -35,7 +35,7 @@ Usage
 
 Use of `Auth` is the same as with the default service provider.
 
-By Default this will have the `username`, and `displayname`
+By Default this will have the `username (samaccountname)`, and `displayname`
 
 To edit what is returned you can specify in `config/auth.php` under the `fields` key.
 
