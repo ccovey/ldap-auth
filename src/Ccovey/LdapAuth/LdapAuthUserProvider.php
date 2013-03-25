@@ -54,7 +54,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         }
         
         if (isset($infoCollection)) {
-            return new Auth\GenericUser((array) $this->setInfoArray($infoCollection));
+            return new LdapUser((array) $this->setInfoArray($infoCollection));
         }
     }
 
@@ -117,6 +117,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         return $info;
     }
 
+    /**
+     * 
+     * @return Illuminate\Auth\UserInterface
+     */
     protected function createModel()
     {   
         $model = '\\' . ltrim($this->model, '\\');
@@ -124,6 +128,13 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         return new $model;
     }
 
+    /**
+     * Add Ldap fields to current user model.
+     * 
+     * @param Illuminate\Auth\UserInterface $model
+     * @param adLDAP\collection\adLDAPCollection $ldap
+     * @return Illuminate\Auth\UserInterface
+     */
     protected function addLdapToModel($model, $ldap)
     {
         $combined = $model->getAttributes() + $ldap;
