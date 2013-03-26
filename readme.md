@@ -33,6 +33,8 @@ This tells Laravel 4 to use the service provider from the vendor folder.
 Usage
 ======
 
+To define your domain and other AD specific information you must set it in /vendor/adLDAP/adLDAP/lib/adLDAP/adLDAP.php
+
 Use of `Auth` is the same as with the default service provider.
 
 By Default this will have the `username (samaccountname)`, and `displayname`

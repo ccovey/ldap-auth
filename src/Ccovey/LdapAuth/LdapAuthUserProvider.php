@@ -43,7 +43,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByID($identifier)
     {
-        $infoCollection = $this->ad->user()->infoCollection($identifier);
+        $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
 
         $ldapUserInfo = $this->setInfoArray($infoCollection);
 
