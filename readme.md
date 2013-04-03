@@ -10,7 +10,7 @@ To install this in your application add the following to your `composer.json` fi
 
 ```json
 require {
-	"ccovey/ldap-auth": "dev-master",
+	"ccovey/ldap-auth": "dev-develop",
 }
 ```
 
@@ -26,16 +26,26 @@ Open `config/app.php` and find
 
 and replace it with
 
-`Ccovey\LdapAuthServiceProvider`
+`Ccovey\LdapAuth\LdapAuthServiceProvider`
 
-This tell Laravel 4 to use the service provider from the vendor folder.
+This tells Laravel 4 to use the service provider from the vendor folder.
+
+Usage
+======
+
+To define your domain and other AD specific information you must set it in /vendor/adLDAP/adLDAP/lib/adLDAP/adLDAP.php
 
 Use of `Auth` is the same as with the default service provider.
 
-By Default this will have the `username`, `groups`, and `displayname`
+By Default this will have the `username (samaccountname)`, and `displayname`
 
 To edit what is returned you can specify in `config/auth.php` under the `fields` key.
 
 For more information on what fields from AD are available to you visit http://goo.gl/6jL4V
 
 You may also get a complete user list for a specific OU by defining the `table` key.
+
+Model Usage
+===========
+
+You can still use a model with this implementation as well if you want. ldap-auth will take your fields from ldap and attach them to the model allowing you to access things such as roles / permissions from the model if the account is valid in Active Directory.
