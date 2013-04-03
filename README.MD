@@ -37,7 +37,8 @@ To define your domain and other AD specific information you must set it in /vend
 
 Use of `Auth` is the same as with the default service provider.
 
-By Default this will have the `username (samaccountname)`, and `displayname`
+By Default this will have the `username (samaccountname)`, and `displayname`, `primarygroup`, and all groups the user belongs to. 
+The Primary group is sort of a guess. I have never had issues with this being wrong but please let me know if this is an issue.
 
 To edit what is returned you can specify in `config/auth.php` under the `fields` key.
 
