@@ -1,7 +1,7 @@
 <?php namespace Ccovey\LdapAuth;
 
-use Illuminate\Auth;
 use adLDAP;
+use Illuminate\Auth;
 
 /**
  * Class to build array to send to GenericUser
@@ -45,7 +45,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     {
         $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
 
-        $ldapUserInfo = $this->setInfoArray($infoCollection);
+        if ( $infoCollection ) {
+            $ldapUserInfo = $this->setInfoArray($infoCollection);
+        }
 
         if ($this->model) {
             $model = $this->createModel()->newQuery()->find($identifier);
@@ -55,8 +57,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
         }
         
-        if (isset($infoCollection)) {
-            return new LdapUser((array) $this->setInfoArray($infoCollection));
+        if ($infoCollection) {
+            return new LdapUser((array) $ldapUserInfo);
         }
     }
 
@@ -105,6 +107,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             //if no fields array present default to username and displayName
             $info['username'] = $infoCollection->samaccountname;
             $info['displayname'] = $infoCollection->displayName;
+            $info['primarygroup'] = $this->getPrimaryGroup($infoCollection->distinguishedname);
+            $info['groups'] = $this->getAllGroups($infoCollection->memberof);
+                
         }
         
         /*
@@ -115,7 +120,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         if (\Config::has('auth.userlist')) {
             $info['userlist'] = $this->ad->folder()->listing(array(\Config::get('auth.group')));
         }
-        
+
         return $info;
     }
 
@@ -142,5 +147,36 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         $combined = $model->getAttributes() + $ldap;
 
         return $model->fill($combined);
+    }
+
+    /**
+     * Return Primary Group Listing
+     * @param  array $groupList 
+     * @return string
+     */
+    protected function getPrimaryGroup($groupList)
+    {
+        $groups = explode(',', $groupList);
+
+        return substr($groups[1], '3');
+    }
+
+    /**
+     * Return list of groups (except domain and suffix)
+     * @param  array $groups 
+     * @return array
+     */
+    protected function getAllGroups($groups) 
+    {
+        foreach ($groups as $k => $group) {
+            $splitGroups = explode(',', $group);
+            foreach ($splitGroups as $splitGroup) {
+                if (substr($splitGroup,0, 3) !== 'DC=') {
+                    $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+                }
+            }
+        }
+
+        return $grps;
     }
 }
