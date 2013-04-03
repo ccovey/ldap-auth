@@ -33,6 +33,8 @@ This tells Laravel 4 to use the service provider from the vendor folder.
 Usage
 ======
 
+Now that Taylor has gotten rid of the Bender from the future bug you need to add $guarded = array(); to your User model if you are using a user. If your user table contains things such as roles you may want to set those in the $guarded variable to prevent them from being mass fillable.
+
 To define your domain and other AD specific information you must set it in /vendor/adLDAP/adLDAP/lib/adLDAP/adLDAP.php
 
 Use of `Auth` is the same as with the default service provider.
