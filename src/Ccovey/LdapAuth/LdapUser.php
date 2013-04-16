@@ -1,5 +1,6 @@
 <?php namespace Ccovey\LdapAuth;
 
+use Config;
 use Illuminate\Auth;
 
 /**
@@ -22,7 +23,7 @@ class LdapUser implements Auth\UserInterface
 	 */
     public function getAuthIdentifier()
 	{
-		$username = (\Config::has('auth.username_field')) ? \Config::get('auth.username_field') : 'username';
+		$username = (Config::has('auth.username_field')) ? Config::get('auth.username_field') : 'username';
 		return $this->attributes[$username];
 	}
     

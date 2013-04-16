@@ -1,5 +1,6 @@
 <?php namespace Ccovey\LdapAuth;
 
+use Config;
 use adLDAP;
 use Illuminate\Auth;
 
@@ -99,8 +100,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* If you have 'user' => 'samaccountname' it will set the $info['user'] = $infoCollection->samaccountname
 		* refer to the adLDAP docs for which fields are available.
     	*/
-        if (\Config::has('auth.fields')) {
-            foreach (\Config::get('auth.fields') as $k => $field) {
+        if (Config::has('auth.fields')) {
+            foreach (Config::get('auth.fields') as $k => $field) {
                 $info[$k] = $infoCollection->$field;
             }
         }else{
@@ -117,8 +118,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
 		* The table is the OU in Active directory you need a list of.
         */
-        if (\Config::has('auth.userlist')) {
-            $info['userlist'] = $this->ad->folder()->listing(array(\Config::get('auth.group')));
+        if (Config::has('auth.userlist')) {
+            $info['userlist'] = $this->ad->folder()->listing(array(Config::get('auth.group')));
         }
 
         return $info;
