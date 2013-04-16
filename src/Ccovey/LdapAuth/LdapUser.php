@@ -22,7 +22,7 @@ class LdapUser implements Auth\UserInterface
 	 */
     public function getAuthIdentifier()
 	{
-		$username = (\Config::has('auth.username_field')) ? \Config::get('auth.username_field') : 'id';
+		$username = (\Config::has('auth.username_field')) ? \Config::get('auth.username_field') : 'username';
 		return $this->attributes[$username];
 	}
     
