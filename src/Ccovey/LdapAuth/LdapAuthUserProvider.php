@@ -29,7 +29,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * 
      * @param adLDAP\adLDAP $conn
      */
-    public function __construct(adLDAP\adLDAP $conn, $model = null)
+    public function __construct(LdapAdService $conn, $model = null)
     {
         $this->ad = $conn;
         
