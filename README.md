@@ -10,7 +10,7 @@ To install this in your application add the following to your `composer.json` fi
 
 ```json
 require {
-	"ccovey/ldap-auth": "dev-develop",
+	"ccovey/ldap-auth": "dev-master",
 }
 ```
 
