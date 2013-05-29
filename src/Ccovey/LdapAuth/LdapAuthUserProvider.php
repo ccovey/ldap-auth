@@ -44,23 +44,34 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByID($identifier)
     {
+        $ldapUserInfo = null;
         $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
-        }
 
-        if ($this->model) {
-            $model = $this->createModel()->newQuery()->find($identifier);
-            
-            if ( ! is_null($model) ) {
-                return $this->addLdapToModel($model, $ldapUserInfo);
+            if ($this->model) {
+                $model = $this->createModel()->newQuery()->find($identifier);
+                
+                if ( ! is_null($model) ) {
+                    return $this->addLdapToModel($model, $ldapUserInfo);
+                }
+            }
+        }else{
+            $ldapUserInfo = array(
+                'username' => $identifier
+            );
+
+            if ($this->model) {
+                $model = $this->createModel()->newQuery()->find($identifier);
+                
+                if ( ! is_null($model) ) {
+                    return $this->addLdapToModel($model, $ldapUserInfo);
+                }
             }
         }
-        
-        if ($infoCollection) {
-            return new LdapUser((array) $ldapUserInfo);
-        }
+
+        return new LdapUser((array) $ldapUserInfo);
     }
 
     /**
@@ -169,11 +180,14 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     protected function getAllGroups($groups) 
     {
-        foreach ($groups as $k => $group) {
-            $splitGroups = explode(',', $group);
-            foreach ($splitGroups as $splitGroup) {
-                if (substr($splitGroup,0, 3) !== 'DC=') {
-                    $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+        $grps = '';
+        if ( ! is_null($groups) ) {
+            foreach ($groups as $k => $group) {
+                $splitGroups = explode(',', $group);
+                foreach ($splitGroups as $splitGroup) {
+                    if (substr($splitGroup,0, 3) !== 'DC=') {
+                        $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+                    }
                 }
             }
         }
