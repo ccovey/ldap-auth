@@ -1,20 +1,25 @@
 {
     "name": "ccovey/ldap-auth",
-    "type": "library",
-    "description": "LDAP Auth Driver for use in Laravel 4",
-    "keywords": ["L4", "LDAP", "LDAP Authentication", "Laravel 4", "Laravel"],
-    "homepage": "http://github.com/ccovey/ldap-auth/",
-    "require": {
-        "adLdap/adLdap": "4.x-dev",
-        "php": ">=5.3.0"
-    },
+    "description": "",
     "authors": [
         {
             "name": "Cody Covey",
             "email": "ccovey14@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x",
+        "illuminate/auth": "4.0.x",
+        "adLdap/adLdap": "4.x-dev"
+    },
     "autoload": {
-        "psr-0": { "LDAPAuth": "src/" }
-    }
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Ccovey\\LdapAuth": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }
