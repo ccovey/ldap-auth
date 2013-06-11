@@ -27,6 +27,8 @@ class LdapAuthManager extends Auth\AuthManager
     protected function createLdapProvider()
     {
         $ad = new LdapAdService();
+
+        $model = null;
         
         if ($this->app['config']['auth.model']) {
             $model = $this->app['config']['auth.model'];
