@@ -46,8 +46,6 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     {
         $ldapUserInfo = null;
         
-        $this->ad->authenticate($identifier);
-        
         $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
 
         if ( $infoCollection ) {
