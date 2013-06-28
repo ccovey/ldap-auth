@@ -1,6 +1,6 @@
 <?php namespace Ccovey\LdapAuth;
 
-use Config;
+use Illuminate\Config\Repository;
 use adLDAP;
 use Illuminate\Auth;
 
@@ -29,9 +29,11 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * 
      * @param adLDAP\adLDAP $conn
      */
-    public function __construct(LdapAdService $conn, $model = null)
+    public function __construct(LdapAdService $conn, $config, $model = null)
     {
         $this->ad = $conn;
+
+        $this->config = $config;
         
         $this->model = $model;
     }
@@ -46,31 +48,21 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     {
         $ldapUserInfo = null;
         
-        $this->ad->authenticate($identifier);
-        
         $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
-
-            if ($this->model) {
-                $model = $this->createModel()->newQuery()->find($identifier);
-                
-                if ( ! is_null($model) ) {
-                    return $this->addLdapToModel($model, $ldapUserInfo);
-                }
-            }
         }else{
             $ldapUserInfo = array(
                 'username' => $identifier
             );
+        }
 
-            if ($this->model) {
-                $model = $this->createModel()->newQuery()->find($identifier);
-                
-                if ( ! is_null($model) ) {
-                    return $this->addLdapToModel($model, $ldapUserInfo);
-                }
+        if ($this->model) {
+            $model = $this->createModel()->newQuery()->find($identifier);
+            
+            if ( ! is_null($model) ) {
+                return $this->addLdapToModel($model, $ldapUserInfo);
             }
         }
 
@@ -106,7 +98,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param adLDAP\adLDAP $infoCollection
      * @return array $info
      */
-    protected function setInfoArray(adLDAP\collections\adLDAPUserCollection $infoCollection)
+    protected function setInfoArray($infoCollection)
     {
     	/*
 		* in app/auth.php set the fields array with each value
@@ -114,8 +106,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* If you have 'user' => 'samaccountname' it will set the $info['user'] = $infoCollection->samaccountname
 		* refer to the adLDAP docs for which fields are available.
     	*/
-        if (Config::has('auth.fields')) {
-            foreach (Config::get('auth.fields') as $k => $field) {
+        if ( ! empty($this->config['fields'])) {
+            foreach ($this->config['fields'] as $k => $field) {
                 $info[$k] = $infoCollection->$field;
             }
         }else{
@@ -124,7 +116,6 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             $info['displayname'] = $infoCollection->displayName;
             $info['primarygroup'] = $this->getPrimaryGroup($infoCollection->distinguishedname);
             $info['groups'] = $this->getAllGroups($infoCollection->memberof);
-                
         }
         
         /*
@@ -132,8 +123,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
 		* The table is the OU in Active directory you need a list of.
         */
-        if (Config::has('auth.userlist')) {
-            $info['userlist'] = $this->ad->folder()->listing(array(Config::get('auth.group')));
+        if ($this->config['userlist']) {
+            $info['userlist'] = $this->ad->folder()->listing(array($this->config['group']));
         }
 
         return $info;
@@ -143,7 +134,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * 
      * @return Illuminate\Auth\UserInterface
      */
-    protected function createModel()
+    public function createModel()
     {   
         $model = '\\' . ltrim($this->model, '\\');
         
@@ -196,5 +187,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         }
 
         return $grps;
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 }

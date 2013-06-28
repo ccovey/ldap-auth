@@ -32,6 +32,11 @@ class LdapAuthManager extends Auth\AuthManager
             $model = $this->app['config']['auth.model'];
         }
         
-        return new LdapAuthUserProvider($ad, $model);
+        return new LdapAuthUserProvider($ad, $model, $this->getAuthConfig());
+    }
+
+    protected function getAuthConfig()
+    {
+        return $this->app['config']['auth'];
     }
 }
