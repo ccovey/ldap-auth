@@ -27,7 +27,7 @@ class LdapAuthManager extends AuthManager
      */
     protected function createLdapProvider()
     {
-        $ad = new LdapAdService($this->getLdapConfig());
+        $ad = new adLDAP($this->getLdapConfig());
 
         $model = null;
         
@@ -46,9 +46,7 @@ class LdapAuthManager extends AuthManager
 
     protected function getLdapConfig()
     {
-        $ldap = $this->app['config']['adldap'];
-
-        if ( ! empty($ldap) ) return $ldap;
+        if (is_array($this->app['config']['adldap'])) return $this->app['config']['adldap'];
 
         return array();
     }

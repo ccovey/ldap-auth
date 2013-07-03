@@ -29,7 +29,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * 
      * @param adLDAP\adLDAP $conn
      */
-    public function __construct(LdapAdService $conn, $config, $model = null)
+    public function __construct(adLDAP\adLDAP $conn, $config, $model = null)
     {
         $this->ad = $conn;
 
@@ -119,7 +119,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 		* Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
 		* The table is the OU in Active directory you need a list of.
         */
-        if ($this->config['userlist']) {
+        if ( ! empty($this->config['userList'])) {
             $info['userlist'] = $this->ad->folder()->listing(array($this->config['group']));
         }
 
