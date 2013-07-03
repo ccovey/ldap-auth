@@ -3,7 +3,7 @@
 use Exception;
 use adLDAP\adLDAP;
 use Illuminate\Auth\Guard;
-use Illumianate\Auth\AuthManager;
+use Illuminate\Auth\AuthManager;
 
 /**
 * 
