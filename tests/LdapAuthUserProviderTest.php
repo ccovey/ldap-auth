@@ -16,8 +16,6 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 			->zeroOrMoreTimes()
 			->andReturn(null);
 
-		$this->mockAdInfo = m::mock('adLDAP\collections\adLDAPUserCollection');
-
 		$this->ident = 'ccovey';
 
 		$this->ad->shouldReceive('user')->atLeast(1)
@@ -44,9 +42,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
 		$returned = $user->retrieveByID($this->ident);
 
-		$this->assertInstanceOf('Ccovey\LdapAuth\LdapUser', $returned);
-
-		$this->assertEquals('ccovey', $returned->username); // via __get() magic method.
+		$this->assertNull($returned);
 	}
 
 	public function testModelResolved()
@@ -56,28 +52,15 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('User', $user->createModel());
 	}
 
-	public function testRetrieveByIDWithModelReturnsLdapUser()
+	public function testRetrieveByIDWithModelAndNoUserReturnsNull()
 	{
 		$this->ad->shouldReceive('infoCollection')
 			->once()->with($this->ident, ['*'])->andReturn(false);
 		$user = $this->getProvider($this->ad, 'User');
 
-		$mock = m::mock('stdClass');
-		$mock->shouldReceive('newQuery')->once()->andReturn($mock);
-		
-		$modelMock = m::mock('stdClass');
-		$modelMock->shouldReceive('getAttributes')->once()->andReturn(array('foo' => 'bar'));
-		$modelMock->shouldReceive('fill')->once()->andReturn(array('foo' => 'bar', $this->ident));
-
-		$mock->shouldReceive('find')->once()->with($this->ident)->andReturn($modelMock);
-
-		$user->expects($this->once())->method('createModel')->will($this->returnValue($mock));
-
 		$retrieved = $user->retrieveByID($this->ident);
 
-		$this->assertContains('bar', $retrieved);
-
-		$this->assertContains('ccovey', $retrieved);
+		$this->assertNull($retrieved);
 	}
 
 	public function testRetrieveByIDWithModelAndLdapInfo()
@@ -105,9 +88,21 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 		$this->assertContains('ccovey', $retrieved);
 	}
 
+	public function testValidateCredentials()
+	{
+		$credentials = array('username' => 'ccovey', 'password' => 'password');
+		$this->ad->shouldReceive('authenticate')->once()->andReturn(true);
+		$user = new Ccovey\LdapAuth\LdapAuthUserProvider($this->ad,$this->config);
+		$model = m::mock('Ccovey\LdapAuth\LdapUser');
+		$validate = $user->validateCredentials($model, $credentials);
+
+		$this->assertTrue($validate);
+	}
+
 	protected function getProvider($conn, $model = null)
 	{
-		return $this->getMock('Ccovey\LdapAuth\LdapAuthUserProvider', array('createModel'), array($conn, $this->config, $model));
+		return $this->getMock('Ccovey\LdapAuth\LdapAuthUserProvider', 
+			array('createModel'), array($conn, $this->config, $model));
 	}
 
 	protected function getLdapInfo()

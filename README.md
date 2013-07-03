@@ -10,7 +10,7 @@ To install this in your application add the following to your `composer.json` fi
 
 ```json
 require {
-	"ccovey/ldap-auth": "dev-master",
+	"ccovey/ldap-auth": "2.0.x",
 }
 ```
 
@@ -30,12 +30,37 @@ and replace it with
 
 This tells Laravel 4 to use the service provider from the vendor folder.
 
+You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`
+
+Configuration
+=============
+To set up your adLDAP for connections to your domain controller, create a file app/config/adldap.php This will provide all the configuration values for your connection. For all configuration options an array like the one below should be provided.
+
+It is important to note that the only required options are `accountSuffix`, and `domainControllers` The others provide either security or more information. If you don't want to use the others simply delete them.
+
+```php
+return array(
+	'accountSuffix' => "@domain.local",
+
+	'domainControllers' => array("dc1.domain.local", "dc2.domain.local"), // An array of domains may be provided for load balancing.
+
+	'adminUsername' => 'user', // May be null but less info will be returned.
+
+	'adminPassword' => 'password', // May be null but less info will be returned.
+
+	'realPrimaryGroup' => true, // Returns the primary group (an educated guess).
+
+	'useSSL' => true, // If TLS is true this MUST be false.
+
+	'useTLS' => false, // If SSL is true this MUST be false.
+
+	'recursiveGroups' => true,
+);
+
 Usage
 ======
 
 $guarded is now defaulted to all so to use a model you must change to `$guarded = array()`. If you store Roles or similar sensitive information make sure that you add that to the guarded array.
-
-To define your domain and other AD specific information you must set it in /vendor/adLDAP/adLDAP/lib/adLDAP/adLDAP.php
 
 Use of `Auth` is the same as with the default service provider.
 
@@ -45,9 +70,9 @@ To edit what is returned you can specify in `config/auth.php` under the `fields`
 
 For more information on what fields from AD are available to you visit http://goo.gl/6jL4V
 
-You may also get a complete user list for a specific OU by defining the `table` key.
+You may also get a complete user list for a specific OU by defining the `userList` key and setting it to `true`. You must also set the `group` key that defined which OU to look at. Do not that on a large AD this may slow down the application.
 
 Model Usage
 ===========
 
-You can still use a model with this implementation as well if you want. ldap-auth will take your fields from ldap and attach them to the model allowing you to access things such as roles / permissions from the model if the account is valid in Active Directory.
+You can still use a model with this implementation as well if you want. ldap-auth will take your fields from ldap and attach them to the model allowing you to access things such as roles / permissions from the model if the account is valid in Active Directory. It is also important to note that no authentication takes place off of the model. All authentication is done from Active Directory and if they are removed from AD but still in a users table they WILL NOT be able to log in.

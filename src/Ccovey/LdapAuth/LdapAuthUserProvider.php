@@ -52,21 +52,17 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
-        }else{
-            $ldapUserInfo = array(
-                'username' => $identifier
-            );
-        }
 
-        if ($this->model) {
-            $model = $this->createModel()->newQuery()->find($identifier);
-            
-            if ( ! is_null($model) ) {
-                return $this->addLdapToModel($model, $ldapUserInfo);
+            if ($this->model) {
+                $model = $this->createModel()->newQuery()->find($identifier);
+                
+                if ( ! is_null($model) ) {
+                    return $this->addLdapToModel($model, $ldapUserInfo);
+                }
             }
-        }
 
-        return new LdapUser((array) $ldapUserInfo);
+            return new LdapUser((array) $ldapUserInfo);
+        }
     }
 
     /**
