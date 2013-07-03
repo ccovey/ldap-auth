@@ -36,18 +36,19 @@ Configuration
 =============
 To set up your adLDAP for connections to your domain controller, create a file app/config/adldap.php This will provide all the configuration values for your connection. For all configuration options an array like the one below should be provided.
 
-It is important to note that the only required options are `accountSuffix`, and `domainControllers` The others provide either security or more information. If you don't want to use the others simply delete them.
+It is important to note that the only required options are `account_suffix`, `base_dn`, and `domain_controllers`The others provide either security or more information. If you don't want to use the others simply delete them.
 
 ```php
 return array(
-	'accountSuffix' => "@domain.local",
+	'account_suffix' => "@domain.local",
 
-	'domainControllers' => array("dc1.domain.local", "dc2.domain.local"), // An array of domains may be provided for load balancing.
+	'domain_controllers' => array("dc1.domain.local", "dc2.domain.local"), // An array of domains may be provided for load balancing.
 
-	'adminUsername' => 'user', // May be null but less info will be returned.
+	'base_dn' => 'DC=domain,DC=local',
 
-	'adminPassword' => 'password', // May be null but less info will be returned.
+	'adminUsername' => 'user',
 
+	'adminPassword' => 'password',
 	'realPrimaryGroup' => true, // Returns the primary group (an educated guess).
 
 	'useSSL' => true, // If TLS is true this MUST be false.
