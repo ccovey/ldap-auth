@@ -40,8 +40,10 @@ class LdapAuthManager extends AuthManager
 
     protected function getAuthConfig()
     {
-        return ! is_null($this->app['config']['auth']) ? $this->app['config']['auth']
-            : throw new MissingAuthConfigException;
+        if ( ! is_null($this->app['config']['auth']) ) {
+            return $this->app['config']['auth'];
+        }
+        throw new MissingAuthConfigException;
     }
 
     protected function getLdapConfig()
