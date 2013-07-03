@@ -46,16 +46,16 @@ return array(
 
 	'base_dn' => 'DC=domain,DC=local',
 
-	'adminUsername' => 'user',
+	'admin_username' => 'user',
 
-	'adminPassword' => 'password',
-	'realPrimaryGroup' => true, // Returns the primary group (an educated guess).
+	'admin_password' => 'password',
+	'real_primary_group' => true, // Returns the primary group (an educated guess).
 
-	'useSSL' => true, // If TLS is true this MUST be false.
+	'use_ssl' => true, // If TLS is true this MUST be false.
 
-	'useTLS' => false, // If SSL is true this MUST be false.
+	'use_tls' => false, // If SSL is true this MUST be false.
 
-	'recursiveGroups' => true,
+	'recursive_groups' => true,
 );
 
 Usage
