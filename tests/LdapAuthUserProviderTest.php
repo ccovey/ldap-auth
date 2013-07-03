@@ -11,7 +11,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		$this->ad = m::mock('Ccovey\LdapAuth\LdapAdService');
+		$this->ad = m::mock('adLDAP\adLDAP');
 		$this->ad->shouldReceive('close')
 			->zeroOrMoreTimes()
 			->andReturn(null);
