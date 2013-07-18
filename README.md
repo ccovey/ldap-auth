@@ -57,6 +57,7 @@ return array(
 
 	'recursive_groups' => true,
 );
+```
 
 Usage
 ======
