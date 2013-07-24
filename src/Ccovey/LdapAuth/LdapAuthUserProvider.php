@@ -104,7 +104,11 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     	*/
         if ( ! empty($this->config['fields'])) {
             foreach ($this->config['fields'] as $k => $field) {
-                $info[$k] = $infoCollection->$field;
+                if ($k == 'groups') {
+                    $info[$k] = $this->getAllGroups($infoCollection->memberof);
+                }else{    
+                    $info[$k] = $infoCollection->$field;
+                }
             }
         }else{
             //if no fields array present default to username and displayName
