@@ -106,6 +106,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             foreach ($this->config['fields'] as $k => $field) {
                 if ($k == 'groups') {
                     $info[$k] = $this->getAllGroups($infoCollection->memberof);
+                }elseif ($k == 'primarygroup') {
+                    $info[$k] = $this->getPrimaryGroup($infoCollection->distinguishedname);
                 }else{    
                     $info[$k] = $infoCollection->$field;
                 }
