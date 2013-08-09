@@ -54,10 +54,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                $modelName      = $this->getModelName();
-                $identifierKey  = $this->getIdentifierKey();
 
-                $model = $modelName::where($identifierKey, '=', $identifier)->first();
+                $modelName  = $this->getModelName();
+                $model      = $modelName::where($this->getIdentifierKey(), '=', $identifier)->first();
 
                 if ( ! is_null($model) ) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
@@ -151,7 +150,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     /**
      * @return string
      */
-    public function getIdentifierKey() {
+    public function getIdentifierKey()
+    {
         return isset($this->config['identifier']) ? $this->config['identifier'] : 'username';
     }
 
