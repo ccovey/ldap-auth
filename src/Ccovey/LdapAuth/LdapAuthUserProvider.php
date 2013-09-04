@@ -77,7 +77,6 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByCredentials(array $credentials)
     {
-        // \Log::warning(json_encode($credentials));//debug
         if ($this->model) {
             $query = $this->createModel()->newQuery();
 
@@ -87,7 +86,6 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
 
             $model = $query->first();
-            // \Log::warning($model->$identifierField);//debug
             if($model) {
                 return $this->retrieveByID($model->getKey(), $model->{$this->getUsernameField()});
             }
