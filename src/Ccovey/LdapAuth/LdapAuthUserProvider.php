@@ -39,23 +39,27 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     }
 
     /**
-     * Retrieve a user by their unique idenetifier.
+     * Retrieve a user by their unique identifier.
      *
      * @param  mixed  $identifier
+     * @param  mixed  $ldapIdentifier; default to null
      * @return Illuminate\Auth\GenericUser|null
      */
-    public function retrieveByID($identifier)
+    public function retrieveByID($identifier, $ldapIdentifier = null)
     {
+        if( is_null($ldapIdentifier) ) {
+            $ldapIdentifier = $identifier;
+        }
         $ldapUserInfo = null;
-        
-        $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
+
+        $infoCollection = $this->ad->user()->infoCollection($ldapIdentifier, array('*') );
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                $model = $this->createModel()->newQuery()->find($identifier);
-                
+                $model = $this->createModel()->newQuery()->where($this->getUsernameField(), $identifier)->first();
+
                 if ( ! is_null($model) ) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
                 }
@@ -73,7 +77,28 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByCredentials(array $credentials)
     {
-        return $this->retrieveByID($credentials['username']);
+        if ($this->model) {
+            $query = $this->createModel()->newQuery();
+
+            foreach ($credentials as $key => $value)
+            {
+                if ( ! str_contains($key, 'password')) $query->where($key, $value);
+            }
+
+            $model = $query->first();
+            if($model) {
+                return $this->retrieveByID($model->getKey(), $model->{$this->getUsernameField()});
+            }
+        }
+        return $this->retrieveByID( $credentials[$this->getUsernameField()] );
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsernameField()
+    {
+        return (\Config::has('auth.username_field')) ? \Config::get('auth.username_field') : 'username';
     }
 
     /**
