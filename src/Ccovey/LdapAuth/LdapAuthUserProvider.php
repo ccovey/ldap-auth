@@ -54,7 +54,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                $model = $this->createModel()->newQuery()->find($identifier);
+                $model = $this->createModel()->newQuery()->where($this->getUsernameField(), $identifier)->first();
                 
                 if ( ! is_null($model) ) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
@@ -73,7 +73,28 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function retrieveByCredentials(array $credentials)
     {
-        return $this->retrieveByID($credentials['username']);
+        if ( ! $user = $credentials[$this->getUsernameField()] ) {
+            throw new InvalidArgumentException;
+        }
+
+        $infoCollection = $this->ad->user()->infoCollection($user, array('*'));
+
+        if ($infoCollection) {
+            $ldapUserInfo = $this->setInfoArray($infoCollection);
+            if ($this->model) {
+                $query = $this->createModel()->newQuery();
+
+                foreach ($credentials as $k => $credential) {
+                    if ( ! str_contains($k, 'password') && ! str_contains($k, '_token') ) $query->where($k, $credential);
+                }
+
+                if ($model = $query->first()) {
+                    return $this->addLdapToModel($model, $ldapUserInfo);
+                }
+            }
+
+            return new LdapUser((array) $ldapUserInfo);
+        }
     }
 
     /**
@@ -96,12 +117,12 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     protected function setInfoArray($infoCollection)
     {
-    	/*
-		* in app/auth.php set the fields array with each value
-		* as a field you want from active directory
-		* If you have 'user' => 'samaccountname' it will set the $info['user'] = $infoCollection->samaccountname
-		* refer to the adLDAP docs for which fields are available.
-    	*/
+        /*
+        * in app/auth.php set the fields array with each value
+        * as a field you want from active directory
+        * If you have 'user' => 'samaccountname' it will set the $info['user'] = $infoCollection->samaccountname
+        * refer to the adLDAP docs for which fields are available.
+        */
         if ( ! empty($this->config['fields'])) {
             foreach ($this->config['fields'] as $k => $field) {
                 if ($k == 'groups') {
@@ -121,9 +142,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         }
         
         /*
-		* I needed a user list to populate a dropdown
-		* Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
-		* The table is the OU in Active directory you need a list of.
+        * I needed a user list to populate a dropdown
+        * Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
+        * The table is the OU in Active directory you need a list of.
         */
         if ( ! empty($this->config['userList'])) {
             $info['userlist'] = $this->ad->folder()->listing(array($this->config['group']));
@@ -152,7 +173,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     protected function addLdapToModel($model, $ldap)
     {
-        $combined = $model->getAttributes() + $ldap;
+        $combined = $ldap + $model->getAttributes();
 
         return $model->fill($combined);
     }
@@ -194,5 +215,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     public function getModel()
     {
         return $this->model;
+    }
+
+    protected function getUsernameField()
+    {
+        return $this->config['username_field'];
     }
 }
