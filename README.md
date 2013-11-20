@@ -80,3 +80,5 @@ Model Usage
 ===========
 
 You can still use a model with this implementation as well if you want. ldap-auth will take your fields from ldap and attach them to the model allowing you to access things such as roles / permissions from the model if the account is valid in Active Directory. It is also important to note that no authentication takes place off of the model. All authentication is done from Active Directory and if they are removed from AD but still in a users table they WILL NOT be able to log in.
+
+You can also synchronize your LDAP info to your original Model Database. Just set `'save_model' => true,` in your `config/auth.php`

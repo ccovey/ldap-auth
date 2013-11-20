@@ -71,9 +71,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param  array  $credentials
      * @return Illuminate\Auth\GenericUser|null
      */
-    public function retrieveByCredentials(array $credentials)
-    {
-        if ( ! $user = $credentials[$this->getUsernameField()] ) {
+    public function retrieveByCredentials(array $credentials) {
+        if (!$user = $credentials[$this->getUsernameField()]) {
             throw new InvalidArgumentException;
         }
 
@@ -82,15 +81,15 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         if ($infoCollection) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
             if ($this->model) {
-                $query = $this->createModel()->newQuery();
+                $model = $this->createModel()->newQuery()
+                        ->where($this->getUsernameField(), $credentials[$this->getUsernameField()])
+                        ->first();
 
-                foreach ($credentials as $k => $credential) {
-                    if ( ! str_contains($k, 'password') && ! str_contains($k, '_token') ) $query->where($k, $credential);
+                if (is_null($model)) {
+                    return $this->addLdapToModel($this->createModel(), $ldapUserInfo);
                 }
 
-                if ($model = $query->first()) {
-                    return $this->addLdapToModel($model, $ldapUserInfo);
-                }
+                return $model;
             }
 
             return new LdapUser((array) $ldapUserInfo);
@@ -165,7 +164,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     }
 
     /**
-     * Add Ldap fields to current user model.
+     * Add Ldap fields to current user model and save it to Database.
      * 
      * @param Illuminate\Auth\UserInterface $model
      * @param adLDAP\collection\adLDAPCollection $ldap
@@ -174,8 +173,13 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     protected function addLdapToModel($model, $ldap)
     {
         $combined = $ldap + $model->getAttributes();
+        $model->fill($combined);
 
-        return $model->fill($combined);
+        if (isset($this->config['save_model']) && $this->config['save_model']) {
+            $model->save();
+        }
+
+        return $model;
     }
 
     /**
