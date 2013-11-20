@@ -71,9 +71,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param  array  $credentials
      * @return Illuminate\Auth\GenericUser|null
      */
-    public function retrieveByCredentials(array $credentials)
-    {
-        if ( ! $user = $credentials[$this->getUsernameField()] ) {
+    public function retrieveByCredentials(array $credentials) {
+        if (!$user = $credentials[$this->getUsernameField()]) {
             throw new InvalidArgumentException;
         }
 
@@ -82,15 +81,15 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
         if ($infoCollection) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
             if ($this->model) {
-				$model = $this->createModel()->newQuery()
-						->where($this->getUsernameField(), $credentials[$this->getUsernameField()])
-						->first();
-				
+                $model = $this->createModel()->newQuery()
+                        ->where($this->getUsernameField(), $credentials[$this->getUsernameField()])
+                        ->first();
+
                 if (is_null($model)) {
-					return $this->addLdapToModel($this->createModel(), $ldapUserInfo);
+                    return $this->addLdapToModel($this->createModel(), $ldapUserInfo);
                 }
-				
-				return $model;
+
+                return $model;
             }
 
             return new LdapUser((array) $ldapUserInfo);
@@ -174,8 +173,8 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     protected function addLdapToModel($model, $ldap)
     {
         $combined = $ldap + $model->getAttributes();
-        
-        if ($this->config['save_model']) {
+
+        if (isset($this->config['save_model']) && $this->config['save_model']) {
             $model->fill($combined)->save();
         }
 
