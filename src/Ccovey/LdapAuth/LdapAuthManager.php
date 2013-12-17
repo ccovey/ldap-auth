@@ -18,7 +18,7 @@ class LdapAuthManager extends AuthManager
     {
         $provider = $this->createLdapProvider();
         
-        return new Guard($provider, $this->app['session']);
+        return new Guard($provider, $this->app['session.store']);
     }
     
     /**

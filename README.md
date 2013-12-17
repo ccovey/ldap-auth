@@ -10,7 +10,7 @@ To install this in your application add the following to your `composer.json` fi
 
 ```json
 require {
-	"ccovey/ldap-auth": "2.0.x",
+	"ccovey/ldap-auth": "1.0.x",
 }
 ```
 
@@ -34,6 +34,8 @@ You also need to direct Auth to use the ldap driver instead of Eloquent or Datab
 
 Configuration
 =============
+To specify the username field to be used in `app/config/auth.php` set a key / value pair `'username_field' => 'fieldname'` This will default to `username` if you don't provide one.
+
 To set up your adLDAP for connections to your domain controller, create a file app/config/adldap.php This will provide all the configuration values for your connection. For all configuration options an array like the one below should be provided.
 
 It is important to note that the only required options are `account_suffix`, `base_dn`, and `domain_controllers`The others provide either security or more information. If you don't want to use the others simply delete them.
@@ -57,6 +59,7 @@ return array(
 
 	'recursive_groups' => true,
 );
+```
 
 Usage
 ======
