@@ -1,6 +1,7 @@
 {
     "name": "ccovey/ldap-auth",
     "description": "",
+    "keywords": ["laravel", "L4", "LDAP", "Authentication", "Laravel 4"],
     "authors": [
         {
             "name": "Cody Covey",
@@ -9,9 +10,9 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.0.x",
-        "illuminate/auth": "4.0.x",
-        "illuminate/config": "4.0.x",
+        "illuminate/support": "4.1.x",
+        "illuminate/auth": "4.1.x",
+        "illuminate/config": "4.1.x",
         "adLdap/adLdap": "4.x-dev"
     },
     "require-dev": {
