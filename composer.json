@@ -13,15 +13,12 @@
         "illuminate/support": "4.0.x",
         "illuminate/auth": "4.0.x",
         "illuminate/config": "4.0.x",
-        "adLdap/adLdap": "4.x-dev"
+        "adLdap/adLdap": "4.0.x"
     },
     "require-dev": {
         "mockery/mockery": "dev-master"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Ccovey\\LdapAuth": "src/"
         }
