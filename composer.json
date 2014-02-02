@@ -13,7 +13,7 @@
         "illuminate/support": "4.1.x",
         "illuminate/auth": "4.1.x",
         "illuminate/config": "4.1.x",
-        "adldap/adldap": "dev-master"
+        "adldap/adldap": "4.0.x"
     },
     "require-dev": {
         "mockery/mockery": "dev-master"
