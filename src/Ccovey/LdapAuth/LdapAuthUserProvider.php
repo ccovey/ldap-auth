@@ -222,6 +222,6 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
     protected function getUsernameField()
     {
-        return $this->config['username_field'];
+        return isset($this->config['username_field'])?$this->config['username_field']:'username';
     }
 }
