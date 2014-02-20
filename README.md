@@ -10,7 +10,7 @@ This will follow releases similar to how Laravel itself manages releases. When L
 
 ```json
 require {
-	"ccovey/ldap-auth": "1.0.x",
+	"ccovey/ldap-auth": "1.1.*",
 }
 ```
 
