@@ -62,6 +62,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
 
             return new LdapUser((array) $ldapUserInfo);
+        } else {
+            // ALWAYS return an LdapUser user, even when we don't have admin access.
+            return new LdapUser(array($this->getUsernameField() => $identifier)); 
         }
     }
 
@@ -94,6 +97,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
 
             return new LdapUser((array) $ldapUserInfo);
+        } else {
+            // ALWAYS return an LdapUser user, even when we don't have admin access.
+            return new LdapUser(array($this->getUsernameField() => $user)); 
         }
     }
 
@@ -106,7 +112,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     public function validateCredentials(Auth\UserInterface $user, array $credentials)
     {
-        return $this->ad->authenticate($credentials['username'], $credentials['password']);
+        // Make sure we're fetching the username field as set by configuration.
+        $fieldName = $this->getUsernameField();
+
+        return $this->ad->authenticate($credentials[$fieldName], $credentials['password']);
     }
     
     /**
