@@ -62,6 +62,9 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             }
 
             return new LdapUser((array) $ldapUserInfo);
+        } else {
+            // ALWAYS return an LdapUser user, even when we don't have admin access.
+            return new LdapUser(array($this->getUsernameField() => $identifier)); 
         }
     }
 
@@ -96,7 +99,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             return new LdapUser((array) $ldapUserInfo);
         } else {
             // ALWAYS return an LdapUser user, even when we don't have admin access.
-            return new LdapUser((array) $credentials); 
+            return new LdapUser(array($this->getUsernameField() => $user)); 
         }
     }
 
