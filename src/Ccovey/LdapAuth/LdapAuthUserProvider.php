@@ -238,6 +238,9 @@ class LdapAuthUserProvider implements UserProviderInterface
     {
         $grps = '';
         if ( ! is_null($groups) ) {
+            if (!is_array($groups)) {
+                $groups = explode(',', $groups);
+            }
             foreach ($groups as $k => $group) {
                 $splitGroups = explode(',', $group);
                 foreach ($splitGroups as $splitGroup) {

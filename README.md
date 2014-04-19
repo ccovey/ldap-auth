@@ -6,7 +6,7 @@ Laravel 4 Active Directory LDAP Authentication driver.
 Installation
 ============
 
-To install this in your application add the following to your `composer.json` file
+This will follow releases similar to how Laravel itself manages releases. When Laravel moves to 4.1 this package will move to 1.1, with minor versions signifying bug fixes, etc. To install this package add the following to your composer.json
 
 ```json
 require {
