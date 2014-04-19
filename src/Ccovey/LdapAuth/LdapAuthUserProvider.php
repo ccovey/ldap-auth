@@ -82,26 +82,15 @@ class LdapAuthUserProvider implements UserProviderInterface
      */
     public function retrieveByToken($identifier, $token)
     {
-        $model = $this->createModel();
-
-        return $model->newQuery()
-            ->where($model->getKeyName(), $identifier)
-            ->where($model->getRememberTokenName(), $token)
-            ->first();
+        return; // this shouldn't be needed as user / password is in ldap
     }
 
     /**
-     * Update the "remember me" token for the given user in storage.
-     *
-     * @param  \Illuminate\Auth\UserInterface  $user
-     * @param  string  $token
      * @return void
      */
     public function updateRememberToken(UserInterface $user, $token)
     {
-        $user->setAttribute($user->getRememberTokenName(), $token);
-
-        $user->save();
+        return; // this shouldn't be needed as user / password is in ldap
     }
 
     /**
