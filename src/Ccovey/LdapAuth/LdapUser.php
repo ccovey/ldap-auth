@@ -2,13 +2,14 @@
 
 use Config;
 use Illuminate\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Description of LdapUser
  *
  * @author ccovey
  */
-class LdapUser implements Auth\UserInterface
+class LdapUser extend Model implements Auth\UserInterface
 {
 	protected $attributes;
 

@@ -2,14 +2,15 @@
 
 use Illuminate\Config\Repository;
 use adLDAP;
-use Illuminate\Auth;
+use Illuminate\Auth\UserProviderInterface;
+use Illuminate\Auth\UserInterface;
 
 /**
  * Class to build array to send to GenericUser
  * This allows the fields in the array to be
  * accessed through the Auth::user() method
  */
-class LdapAuthUserProvider implements Auth\UserProviderInterface
+class LdapAuthUserProvider implements UserProviderInterface
 {
     /**
      * Active Directory Object
@@ -32,9 +33,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     public function __construct(adLDAP\adLDAP $conn, $config, $model = null)
     {
         $this->ad = $conn;
-
         $this->config = $config;
-        
         $this->model = $model;
     }
 
@@ -47,15 +46,24 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     public function retrieveByID($identifier)
     {
         $ldapUserInfo = null;
+        $userNameField = $this->getUsernameField();
+
+        if ($this->model) {
+            $model = $this->createModel()->newQuery()->find($identifier);
+        }
+
+        if (isset($model)) {
+            $username = $model->$userNameField;
+        } else {
+            $username = $identifier;
+        }
         
-        $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
+        $infoCollection = $this->ad->user()->infoCollection($username, array('*') );
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                $model = $this->createModel()->newQuery()->where($this->getUsernameField(), $identifier)->first();
-                
                 if ( ! is_null($model) ) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
                 }
@@ -63,6 +71,37 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
             return new LdapUser((array) $ldapUserInfo);
         }
+    }
+
+    /**
+     * Retrieve a user by by their unique identifier and "remember me" token.
+     *
+     * @param  mixed  $identifier
+     * @param  string  $token
+     * @return \Illuminate\Auth\UserInterface|null
+     */
+    public function retrieveByToken($identifier, $token)
+    {
+        $model = $this->createModel();
+
+        return $model->newQuery()
+            ->where($model->getKeyName(), $identifier)
+            ->where($model->getRememberTokenName(), $token)
+            ->first();
+    }
+
+    /**
+     * Update the "remember me" token for the given user in storage.
+     *
+     * @param  \Illuminate\Auth\UserInterface  $user
+     * @param  string  $token
+     * @return void
+     */
+    public function updateRememberToken(UserInterface $user, $token)
+    {
+        $user->setAttribute($user->getRememberTokenName(), $token);
+
+        $user->save();
     }
 
     /**
@@ -104,7 +143,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      * @param  array  $credentials
      * @return bool
      */
-    public function validateCredentials(Auth\UserInterface $user, array $credentials)
+    public function validateCredentials(UserInterface $user, array $credentials)
     {
         return $this->ad->authenticate($credentials['username'], $credentials['password']);
     }
@@ -129,7 +168,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
                     $info[$k] = $this->getAllGroups($infoCollection->memberof);
                 }elseif ($k == 'primarygroup') {
                     $info[$k] = $this->getPrimaryGroup($infoCollection->distinguishedname);
-                }else{    
+                }else{
                     $info[$k] = $infoCollection->$field;
                 }
             }

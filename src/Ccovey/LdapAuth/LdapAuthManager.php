@@ -5,9 +5,6 @@ use adLDAP\adLDAP;
 use Illuminate\Auth\Guard;
 use Illuminate\Auth\AuthManager;
 
-/**
-* 
-*/
 class LdapAuthManager extends AuthManager
 {
     /**
