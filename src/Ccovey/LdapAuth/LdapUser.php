@@ -39,6 +39,37 @@ class LdapUser extends Model implements Auth\UserInterface
 	}
 
 	/**
+	 * Get the token value for the "remember me" session.
+	 *
+	 * @return string
+	 */
+	public function getRememberToken()
+	{
+		return; // this shouldn't be needed as user / password is in ldap
+	}
+
+	/**
+	 * Set the token value for the "remember me" session.
+	 *
+	 * @param  string  $value
+	 * @return void
+	 */
+	public function setRememberToken($value)
+	{
+		return; // this shouldn't be needed as user / password is in ldap
+	}
+
+	/**
+	 * Get the column name for the "remember me" token.
+	 *
+	 * @return string
+	 */
+	public function getRememberTokenName()
+	{
+		return; // this shouldn't be needed as user / password is in ldap
+	}
+
+	/**
 	 * Dynamically access the user's attributes.
 	 *
 	 * @param  string  $key
