@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @author ccovey
  */
-class LdapUser extend Model implements Auth\UserInterface
+class LdapUser extends Model implements Auth\UserInterface
 {
 	protected $attributes;
 
