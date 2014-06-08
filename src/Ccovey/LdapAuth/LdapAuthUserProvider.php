@@ -66,6 +66,24 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     }
 
     /**
+     * Retrieve a user by by their unique identifier and "remember me" token.
+     *
+     * @param  mixed  $identifier
+     * @param  string  $token
+     * @return \Illuminate\Auth\UserInterface|null
+     */
+    public function retrieveByToken($identifier, $token){}
+
+    /**
+     * Update the "remember me" token for the given user in storage.
+     *
+     * @param  \Illuminate\Auth\UserInterface  $user
+     * @param  string  $token
+     * @return void
+     */
+    public function updateRememberToken(Auth\UserInterface $user, $token){}
+
+    /**
      * Retrieve a user by the given credentials.
      *
      * @param  array  $credentials
@@ -197,18 +215,14 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
      */
     protected function getAllGroups($groups) 
     {
-        $grps = '';
+        $grps = array();
         if ( ! is_null($groups) ) {
             if (!is_array($groups)) {
                 $groups = explode(',', $groups);
             }
             foreach ($groups as $k => $group) {
                 $splitGroups = explode(',', $group);
-                foreach ($splitGroups as $splitGroup) {
-                    if (substr($splitGroup,0, 3) !== 'DC=') {
-                        $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
-                    }
-                }
+                $grps[substr($splitGroups[0], 3)] = substr($splitGroups[0], 3);
             }
         }
 
