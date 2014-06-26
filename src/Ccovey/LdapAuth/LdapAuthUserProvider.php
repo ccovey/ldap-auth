@@ -68,7 +68,7 @@ class LdapAuthUserProvider implements UserProviderInterface
             $infoCollection = new \adLDAP\collections\adLDAPUserCollection($info, $this->ad);
         }
         else {
-            $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
+            $infoCollection = $this->ad->user()->infoCollection($username, array('*') );
         }
 
         if ( $infoCollection ) {
