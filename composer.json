@@ -1,23 +1,19 @@
 {
     "name": "ccovey/ldap-auth",
     "description": "",
-    "keywords": ["laravel", "L4", "LDAP", "Authentication", "Laravel 4", "Laravel 4.1", "Laravel 4.2"],
+    "keywords": ["laravel", "L4", "LDAP", "Authentication", "Laravel 4"],
     "authors": [
         {
             "name": "Cody Covey",
             "email": "ccovey14@gmail.com"
-        },
-        {
-            "name": "Manuel Strebel",
-            "email": "manuel_st@msn.com"
         }
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.*",
-        "illuminate/auth": "4.*",
-        "illuminate/config": "4.*",
-        "adldap/adldap": "dev-master"
+        "illuminate/support": "4.1.x",
+        "illuminate/auth": "4.1.x",
+        "illuminate/config": "4.1.x",
+        "adldap/adldap": "4.0.x"
     },
     "require-dev": {
         "mockery/mockery": "dev-master"
