@@ -50,6 +50,12 @@ class LdapAuthUserProvider implements UserProviderInterface
 
         if ($this->model) {
             $model = $this->createModel()->newQuery()->find($identifier);
+
+            if(is_null($model) && $this->config['create_user'] === true) {
+                $model = $this->createModel();
+                $model->$userNameField = $identifier;
+                $model->save();
+            }
         }
 
         if (isset($model)) {
@@ -64,7 +70,7 @@ class LdapAuthUserProvider implements UserProviderInterface
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                if ( ! is_null($model) ) {
+                if ( ! is_null($model)) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
                 }
             }
