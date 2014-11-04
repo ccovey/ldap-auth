@@ -2,13 +2,14 @@
 
 use Config;
 use Illuminate\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Description of LdapUser
  *
  * @author ccovey
  */
-class LdapUser implements Auth\UserInterface
+class LdapUser extends Model implements Auth\UserInterface
 {
 	protected $attributes;
 
@@ -35,6 +36,37 @@ class LdapUser implements Auth\UserInterface
 	public function getAuthPassword()
 	{
 		return $this->attributes['password'];
+	}
+
+	/**
+	 * Get the token value for the "remember me" session.
+	 *
+	 * @return string
+	 */
+	public function getRememberToken()
+	{
+		return; // this shouldn't be needed as user / password is in ldap
+	}
+
+	/**
+	 * Set the token value for the "remember me" session.
+	 *
+	 * @param  string  $value
+	 * @return void
+	 */
+	public function setRememberToken($value)
+	{
+		return; // this shouldn't be needed as user / password is in ldap
+	}
+
+	/**
+	 * Get the column name for the "remember me" token.
+	 *
+	 * @return string
+	 */
+	public function getRememberTokenName()
+	{
+		return; // this shouldn't be needed as user / password is in ldap
 	}
 
 	/**
