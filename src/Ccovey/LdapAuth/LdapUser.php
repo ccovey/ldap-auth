@@ -1,15 +1,15 @@
 <?php namespace Ccovey\LdapAuth;
 
 use Config;
-use Illuminate\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 /**
  * Description of LdapUser
  *
  * @author ccovey
  */
-class LdapUser extends Model implements Auth\UserInterface
+class LdapUser extends Model implements UserContract
 {
 	protected $attributes;
 

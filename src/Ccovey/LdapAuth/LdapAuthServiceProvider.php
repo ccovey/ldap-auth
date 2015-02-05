@@ -16,10 +16,10 @@ class LdapAuthServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot()
+	/*public function boot()
 	{
 		$this->package('ccovey/ldap-auth');
-	}
+	}*/
 
 	/**
 	 * Register the service provider.
@@ -33,6 +33,11 @@ class LdapAuthServiceProvider extends ServiceProvider {
 			$app['app.loaded'] = true;
 			return new LdapAuthManager($app);
 		});
+
+        $this->app->singleton('auth.driver', function($app)
+        {
+            return $app['auth']->driver();
+        });
 	}
 
 	protected function registerAuthEvents()
