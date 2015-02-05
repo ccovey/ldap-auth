@@ -1,16 +1,60 @@
 Active Directory LDAP Authentication
 =========
 
-Laravel 4 Active Directory LDAP Authentication driver. 
+Laravel 5 Active Directory LDAP Authentication driver. 
+
+Fork
+====
+
+This is a fork of Cody Covey's ldap-auth package. Unfortunately he doesn't develeped the package recently and didn't update the package to Laravel 4.1+ or even Laravel 5. Therefore I decided to fork the package to provide a minimal Laravel 5 support.
+
+The first release, 2.0, isn't well tested. Just be careful!
+
+Contribution
+------------
+Just post an issue or create a pull request on this repository. I'll really appreciate it.
 
 Installation
 ============
 
-This will follow releases similar to how Laravel itself manages releases. When Laravel moves to 4.1 this package will move to 1.1, with minor versions signifying bug fixes, etc. To install this package add the following to your composer.json
+Laravel 5
+---------
+
+This will follow releases similar to how Laravel itself manages releases. When Laravel moves to 5.1 this package will move to 2.1, with minor versions signifying bug fixes, etc. To install this package add the following to your composer.json
 
 ```json
 require {
-	"ccovey/ldap-auth": "1.1.*",
+	"strebl/l5-ldap-auth": "~2.0",
+}
+```
+
+Then run 
+
+`composer install` or `composer update` as appropriate
+
+Once you have finished downloading the package from Packagist.org you need to tell your Application to use the LDAP service provider.
+
+Open `config/app.php` and find
+
+`Illuminate\Auth\AuthServiceProvider`
+
+and replace it with
+
+`Ccovey\LdapAuth\LdapAuthServiceProvider`
+
+This tells Laravel 4 to use the service provider from the vendor folder.
+
+You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`
+
+Laravel 4
+---------
+***The Laravel 4 version of this package is no longer developed.***
+
+To install this package add the following to your composer.json
+
+```json
+require {
+	"strebl/l5-ldap-auth": "~1.0",
 }
 ```
 
