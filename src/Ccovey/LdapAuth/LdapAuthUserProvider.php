@@ -102,7 +102,7 @@ class LdapAuthUserProvider implements UserProviderInterface
     public function retrieveByCredentials(array $credentials)
     {
         if ( ! $user = $credentials[$this->getUsernameField()] ) {
-            throw new InvalidArgumentException;
+            throw new \InvalidArgumentException;
         }
 
         $infoCollection = $this->ad->user()->infoCollection($user, array('*'));
