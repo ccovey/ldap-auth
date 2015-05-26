@@ -112,7 +112,7 @@ class LdapAuthUserProvider implements UserProvider
     public function retrieveByCredentials(array $credentials)
     {
         if ( ! $user = $credentials[$this->getUsernameField()] ) {
-            throw new InvalidArgumentException;
+            throw new \InvalidArgumentException;
         }
 
         //recursive groups fix
