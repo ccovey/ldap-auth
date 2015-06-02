@@ -1,40 +1,38 @@
 <?php namespace Ccovey\LdapAuth;
 
-use Illuminate\Config\Repository;
 use adLDAP;
-use Illuminate\Auth;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 /**
  * Class to build array to send to GenericUser
  * This allows the fields in the array to be
  * accessed through the Auth::user() method
  */
-class LdapAuthUserProvider implements Auth\UserProviderInterface
+class LdapAuthUserProvider implements UserProvider
 {
     /**
      * Active Directory Object
-     * 
+     *
      * @var adLDAP\adLDAP
      */
     protected $ad;
-    
+
     /**
      *
      * @var type string
      */
     protected $model;
-    
+
     /**
      * DI in adLDAP object for use throughout
-     * 
+     *
      * @param adLDAP\adLDAP $conn
      */
     public function __construct(adLDAP\adLDAP $conn, $config, $model = null)
     {
         $this->ad = $conn;
-
         $this->config = $config;
-        
         $this->model = $model;
     }
 
@@ -47,15 +45,35 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     public function retrieveByID($identifier)
     {
         $ldapUserInfo = null;
-        
-        $infoCollection = $this->ad->user()->infoCollection($identifier, array('*') );
+        $userNameField = $this->getUsernameField();
+
+        if ($this->model) {
+            $model = $this->createModel()->newQuery()->find($identifier);
+        }
+
+        if (isset($model)) {
+            $username = $model->$userNameField;
+        } else {
+            $username = $identifier;
+        }
+
+        //recursive groups fix
+        if($this->ad->getRecursiveGroups()) {
+            $info = $this->ad->user()->info($username, ['*'] );
+            $groups = $this->ad->user()->groups($username);
+            $info[0]['memberof'] = $groups;
+            $info[0]['memberof']['count'] = count($groups);
+
+            $infoCollection = new \adLDAP\collections\adLDAPUserCollection($info, $this->ad);
+        }
+        else {
+            $infoCollection = $this->ad->user()->infoCollection($username, ['*'] );
+        }
 
         if ( $infoCollection ) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
 
             if ($this->model) {
-                $model = $this->createModel()->newQuery()->where($this->getUsernameField(), $identifier)->first();
-                
                 if ( ! is_null($model) ) {
                     return $this->addLdapToModel($model, $ldapUserInfo);
                 }
@@ -63,6 +81,26 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
             return new LdapUser((array) $ldapUserInfo);
         }
+    }
+
+    /**
+     * Retrieve a user by by their unique identifier and "remember me" token.
+     *
+     * @param  mixed  $identifier
+     * @param  string  $token
+     * @return UserContract|null
+     */
+    public function retrieveByToken($identifier, $token)
+    {
+        return; // this shouldn't be needed as user / password is in ldap
+    }
+
+    /**
+     * @return void
+     */
+    public function updateRememberToken(UserContract $user, $token)
+    {
+        return; // this shouldn't be needed as user / password is in ldap
     }
 
     /**
@@ -74,10 +112,21 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     public function retrieveByCredentials(array $credentials)
     {
         if ( ! $user = $credentials[$this->getUsernameField()] ) {
-            throw new InvalidArgumentException;
+            throw new \InvalidArgumentException;
         }
 
-        $infoCollection = $this->ad->user()->infoCollection($user, array('*'));
+        //recursive groups fix
+        if($this->ad->getRecursiveGroups()) {
+            $info = $this->ad->user()->info($user, ['*']);
+            $groups = $this->ad->user()->groups($user);
+            $info[0]['memberof'] = $groups;
+            $info[0]['memberof']['count'] = count($groups);
+
+            $infoCollection = new \adLDAP\collections\adLDAPUserCollection($info, $this->ad);
+        }
+        else {
+            $infoCollection = $this->ad->user()->infoCollection($user, ['*']);
+        }
 
         if ($infoCollection) {
             $ldapUserInfo = $this->setInfoArray($infoCollection);
@@ -100,18 +149,19 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
     /**
      * Validate a user against the given credentials.
      *
-     * @param  Illuminate\Auth\UserInterface  $user
-     * @param  array  $credentials
+     * @param  UserContract $user
+     * @param  array $credentials
      * @return bool
+     * @throws adLDAP\adLDAPException
      */
-    public function validateCredentials(Auth\UserInterface $user, array $credentials)
+    public function validateCredentials(UserContract $user, array $credentials)
     {
         return $this->ad->authenticate($credentials['username'], $credentials['password']);
     }
-    
+
     /**
      * Build the array sent to GenericUser for use in Auth::user()
-     * 
+     *
      * @param adLDAP\adLDAP $infoCollection
      * @return array $info
      */
@@ -129,7 +179,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
                     $info[$k] = $this->getAllGroups($infoCollection->memberof);
                 }elseif ($k == 'primarygroup') {
                     $info[$k] = $this->getPrimaryGroup($infoCollection->distinguishedname);
-                }else{    
+                }else{
                     $info[$k] = $infoCollection->$field;
                 }
             }
@@ -140,36 +190,36 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             $info['primarygroup'] = $this->getPrimaryGroup($infoCollection->distinguishedname);
             $info['groups'] = $this->getAllGroups($infoCollection->memberof);
         }
-        
+
         /*
         * I needed a user list to populate a dropdown
         * Set userlist to true in app/config/auth.php and set a group in app/config/auth.php as well
         * The table is the OU in Active directory you need a list of.
         */
         if ( ! empty($this->config['userList'])) {
-            $info['userlist'] = $this->ad->folder()->listing(array($this->config['group']));
+            $info['userlist'] = $this->ad->folder()->listing([$this->config['group']]);
         }
 
         return $info;
     }
 
     /**
-     * 
-     * @return Illuminate\Auth\UserInterface
+     *
+     * @return UserContract
      */
     public function createModel()
-    {   
+    {
         $model = '\\' . ltrim($this->model, '\\');
-        
+
         return new $model;
     }
 
     /**
      * Add Ldap fields to current user model.
-     * 
-     * @param Illuminate\Auth\UserInterface $model
+     *
+     * @param UserContract $model
      * @param adLDAP\collection\adLDAPCollection $ldap
-     * @return Illuminate\Auth\UserInterface
+     * @return UserContract
      */
     protected function addLdapToModel($model, $ldap)
     {
@@ -180,7 +230,7 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
     /**
      * Return Primary Group Listing
-     * @param  array $groupList 
+     * @param  array $groupList
      * @return string
      */
     protected function getPrimaryGroup($groupList)
@@ -192,10 +242,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
 
     /**
      * Return list of groups (except domain and suffix)
-     * @param  array $groups 
+     * @param  array $groups
      * @return array
      */
-    protected function getAllGroups($groups) 
+    protected function getAllGroups($groups)
     {
         $grps = '';
         if ( ! is_null($groups) ) {
@@ -205,8 +255,10 @@ class LdapAuthUserProvider implements Auth\UserProviderInterface
             foreach ($groups as $k => $group) {
                 $splitGroups = explode(',', $group);
                 foreach ($splitGroups as $splitGroup) {
-                    if (substr($splitGroup,0, 3) !== 'DC=') {
+                    if (substr($splitGroup,0, 3) == 'DC=') {
                         $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+                    } else {
+                        $grps[$splitGroup] = $splitGroup;
                     }
                 }
             }

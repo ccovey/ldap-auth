@@ -1,8 +1,12 @@
 {
-    "name": "ccovey/ldap-auth",
-    "description": "",
-    "keywords": ["laravel", "L4", "LDAP", "Authentication", "Laravel 4"],
+    "name": "strebl/l5-ldap-auth",
+    "description": "Laravel 5 Active Directory LDAP Authentication driver",
+    "keywords": ["laravel", "L5", "LDAP", "Authentication", "Laravel 5"],
     "authors": [
+        {
+            "name": "Manuel Strebel",
+            "email": "manuel_st@msn.com"
+        },
         {
             "name": "Cody Covey",
             "email": "ccovey14@gmail.com"
@@ -10,10 +14,10 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.1.x",
-        "illuminate/auth": "4.1.x",
-        "illuminate/config": "4.1.x",
-        "adldap/adldap": "4.0.x"
+        "illuminate/support": "5.0.*",
+        "illuminate/auth": "5.0.*",
+        "illuminate/config": "5.0.*",
+        "strebl/adldap": "~4.0"
     },
     "require-dev": {
         "mockery/mockery": "dev-master"
