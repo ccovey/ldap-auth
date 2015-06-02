@@ -255,8 +255,10 @@ class LdapAuthUserProvider implements UserProvider
             foreach ($groups as $k => $group) {
                 $splitGroups = explode(',', $group);
                 foreach ($splitGroups as $splitGroup) {
-                    if (substr($splitGroup,0, 3) !== 'DC=') {
+                    if (substr($splitGroup,0, 3) == 'DC=') {
                         $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+                    } else {
+                        $grps[$splitGroup] = $splitGroup;
                     }
                 }
             }
