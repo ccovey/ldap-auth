@@ -22,7 +22,7 @@ class TestLdapAuthUserProvider extends PHPUnit_Framework_TestCase
 
         $this->credentials = ['username' => 'user', 'password' => 'password'];
 
-        $this->user = $this->getMockBuilder('Illuminate\Contracts\Auth\Authenticatable')
+        $this->user = $this->getMockBuilder(Illuminate\Contracts\Auth\Authenticatable::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

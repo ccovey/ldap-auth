@@ -10,7 +10,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->ad = m::mock('adLDAP\adLDAP');
+        $this->ad = m::mock(\adLDAP\adLDAP::class);
         $this->ad->shouldReceive('close')
             ->zeroOrMoreTimes()
             ->andReturn(null);
@@ -103,7 +103,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $credentials = ['username' => 'strebel', 'password' => 'password'];
         $this->ad->shouldReceive('authenticate')->once()->andReturn(true);
         $user = $this->getProvider($this->ad, User::class);
-        $model = m::mock(LdapUser::class, 'Illuminate\Contracts\Auth\Authenticatable');
+        $model = m::mock(LdapUser::class, Illuminate\Contracts\Auth\Authenticatable::class);
         $validate = $user->validateCredentials($model, $credentials);
 
         $this->assertTrue($validate);
@@ -111,7 +111,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
     protected function getProvider($conn, $model = null)
     {
-        return $this->getMock('Ccovey\LdapAuth\LdapAuthUserProvider',
+        return $this->getMock(Ccovey\LdapAuth\LdapAuthUserProvider::class,
             ['createModel'], [$conn, $this->config, $model]);
     }
 
