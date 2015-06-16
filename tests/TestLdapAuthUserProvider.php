@@ -1,6 +1,5 @@
 <?php
 
-use adLDAP\adLDAP;
 use Ccovey\LdapAuth;
 
 /**
@@ -23,19 +22,19 @@ class TestLdapAuthUserProvider extends PHPUnit_Framework_TestCase
 
         $this->credentials = ['username' => 'user', 'password' => 'password'];
 
-        $this->user = $this->getMockBuilder('Illuminate\Auth\UserInterface')
+        $this->user = $this->getMockBuilder('Illuminate\Contracts\Auth\Authenticatable')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function tearDown()
     {
-        //Mockery::close();
+        Mockery::close();
     }
 
     public function testValidateCreditialsReturnsTrue()
     {
-        $user = new LdapAuth\LdapAuthUserProvider($this->ad);
+        $user = new LdapAuth\LdapAuthUserProvider($this->ad, 'User');
         $this->assertTrue($user->validateCredentials($this->user, $this->credentials));
     }
 }

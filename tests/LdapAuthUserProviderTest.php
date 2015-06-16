@@ -15,10 +15,13 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
             ->zeroOrMoreTimes()
             ->andReturn(null);
 
-        $this->ident = 'ccovey';
+        $this->ident = 'strebel';
 
         $this->ad->shouldReceive('user')->atLeast(1)
-            ->andReturn($this->ad);
+                 ->andReturn($this->ad);
+
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
 
         $this->config = [
             'fields'   => [],
@@ -46,16 +49,23 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
     public function testModelResolved()
     {
-        $user = new LdapAuth\LdapAuthUserProvider($this->ad, $this->config, 'User');
+        $user = new LdapAuth\LdapAuthUserProvider($this->ad, $this->config, User::class);
 
-        $this->assertInstanceOf('User', $user->createModel());
+        $this->assertInstanceOf(User::class, $user->createModel());
     }
 
     public function testRetrieveByIDWithModelAndNoUserReturnsNull()
     {
         $this->ad->shouldReceive('infoCollection')
             ->once()->with($this->ident, ['*'])->andReturn(false);
-        $user = $this->getProvider($this->ad, 'User');
+        $user = $this->getProvider($this->ad, User::class);
+
+        $mock = m::mock('stdClass');
+        $mock->shouldReceive('newQuery')->once()->andReturn($mock);
+
+        $mock->shouldReceive('find')->once()->with($this->ident)->andReturn(null);
+
+        $user->expects($this->once())->method('createModel')->will($this->returnValue($mock));
 
         $retrieved = $user->retrieveByID($this->ident);
 
@@ -67,12 +77,13 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $this->ad->shouldReceive('infoCollection')
             ->once()->with($this->ident, ['*'])->andReturn($this->getLdapInfo());
 
-        $user = $this->getProvider($this->ad, 'User');
+        $user = $this->getProvider($this->ad, User::class);
 
         $mock = m::mock('stdClass');
         $mock->shouldReceive('newQuery')->once()->andReturn($mock);
 
         $modelMock = m::mock('stdClass');
+        $modelMock->username = 'strebel';
         $modelMock->shouldReceive('getAttributes')->once()->andReturn(['foo' => 'bar']);
         $modelMock->shouldReceive('fill')->once()->andReturn(['foo' => 'bar', $this->ident]);
 
@@ -84,15 +95,15 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('bar', $retrieved);
 
-        $this->assertContains('ccovey', $retrieved);
+        $this->assertContains('strebel', $retrieved);
     }
 
     public function testValidateCredentials()
     {
-        $credentials = ['username' => 'ccovey', 'password' => 'password'];
+        $credentials = ['username' => 'strebel', 'password' => 'password'];
         $this->ad->shouldReceive('authenticate')->once()->andReturn(true);
-        $user = new Ccovey\LdapAuth\LdapAuthUserProvider($this->ad, $this->config);
-        $model = m::mock('Ccovey\LdapAuth\LdapUser');
+        $user = $this->getProvider($this->ad, User::class);
+        $model = m::mock(LdapUser::class, 'Illuminate\Contracts\Auth\Authenticatable');
         $validate = $user->validateCredentials($model, $credentials);
 
         $this->assertTrue($validate);
@@ -108,9 +119,9 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
     {
         $info = new stdClass();
 
-        $info->samaccountname = 'ccovey';
+        $info->samaccountname = 'strebel';
 
-        $info->displayName = 'Cody Covey';
+        $info->displayName = 'Manuel Strebel';
 
         $info->distinguishedname = 'DC=LDAP,OU=AUTH,OU=FIRST GROUP';
 
