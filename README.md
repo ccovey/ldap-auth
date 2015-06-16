@@ -1,3 +1,8 @@
+[![Build Status](https://img.shields.io/travis/strebl/ldap-auth.svg?style=flat-square)](https://travis-ci.org/strebl/ldap-auth)
+[![Total Downloads](https://img.shields.io/packagist/dt/strebl/l5-ldap-auth.svg?style=flat-square)](https://packagist.org/packages/strebl/l5-ldap-auth)
+[![Latest Stable Version](https://img.shields.io/packagist/v/strebl/l5-ldap-auth.svg?style=flat-square)](https://packagist.org/packages/strebl/l5-ldap-auth)
+[![License](https://img.shields.io/packagist/l/strebl/l5-ldap-auth.svg?style=flat-square)](https://packagist.org/packages/strebl/l5-ldap-auth)
+
 Active Directory LDAP Authentication
 =========
 
