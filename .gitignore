@@ -3,3 +3,4 @@ ldapAuth.sublime*
 /nbproject/
 ldap-auth.sublime*
 composer.lock
+.php_cs.cache

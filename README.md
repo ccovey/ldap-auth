@@ -17,52 +17,58 @@ Just post an issue or create a pull request on this repository. I'll really appr
 Installation
 ============
 
-Laravel 5
+Versions
 ---------
 
-This will follow releases similar to how Laravel itself manages releases. When Laravel moves to 5.1 this package will move to 2.1, with minor versions signifying bug fixes, etc. To install this package add the following to your composer.json
+This will follow releases similar to how Laravel itself manages releases. When Laravel moves to 5.2 this package will move to 2.2, with minor versions signifying bug fixes, etc.
 
-```json
-require {
-	"strebl/l5-ldap-auth": "~2.0",
-}
+| Laravel Version | Package Version | Package Status |
+|-----------------|-----------------|----------------| 
+| 5.1.x			  | ~2.1	 	    | maintaned 	 |
+| 5.0.x 		  | ~2.1	 	    | maintaned 	 |
+| 5.0.x 		  | ~2.0	 	    | abandon 	 	 |
+| 4.x 			  | ~1.0	 	    | abandon		 |
+
+Version 2.1 requires PHP 5.5+. If you are using Laravel 5.0 which supports PHP 5.4 you can still use ~2.0. However, this version won't get any updates.
+
+Laravel 5.1 / 5.0
+---------
+
+To install this package pull it in through Composer.
+
+```bash
+composer require strebl/l5-ldap-auth:~2.1
 ```
 
-Then run 
-
-`composer install` or `composer update` as appropriate
-
-Once you have finished downloading the package from Packagist.org you need to tell your Application to use the LDAP service provider.
+After Composer is done, you need to tell your application to use the LDAP service provider.
 
 Open `config/app.php` and find
 
-`Illuminate\Auth\AuthServiceProvider`
+`Illuminate\Auth\AuthServiceProvider::class`
 
 and replace it with
 
-`Ccovey\LdapAuth\LdapAuthServiceProvider`
+`Ccovey\LdapAuth\LdapAuthServiceProvider::class`
 
-This tells Laravel 4 to use the service provider from the vendor folder.
+This tells Laravel to use the service provider from the vendor folder.
 
-You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`
+You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`:
+
+```
+    'driver' => 'ldap',
+```
 
 Laravel 4
 ---------
-***The Laravel 4 version of this package is no longer developed.***
+***The Laravel 4 version of this package is no longer maintained.***
 
-To install this package add the following to your composer.json
+To install this package pull it in through Composer.
 
-```json
-require {
-	"strebl/l5-ldap-auth": "~1.0",
-}
+```bash
+composer require strebl/l5-ldap-auth:~1.0
 ```
 
-Then run 
-
-`composer install` or `composer update` as appropriate
-
-Once you have finished downloading the package from Packagist.org you need to tell your Application to use the LDAP service provider.
+After Composer is done, you need to tell your application to use the LDAP service provider.
 
 Open `config/app.php` and find
 
@@ -72,7 +78,7 @@ and replace it with
 
 `Ccovey\LdapAuth\LdapAuthServiceProvider`
 
-This tells Laravel 4 to use the service provider from the vendor folder.
+This tells Laravel to use the service provider from the vendor folder.
 
 You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`
 
@@ -85,7 +91,7 @@ To set up your adLDAP for connections to your domain controller, create a file a
 It is important to note that the only required options are `account_suffix`, `base_dn`, and `domain_controllers`The others provide either security or more information. If you don't want to use the others simply delete them.
 
 ```php
-return array(
+return [
 	'account_suffix' => "@domain.local",
 
 	'domain_controllers' => array("dc1.domain.local", "dc2.domain.local"), // An array of domains may be provided for load balancing.
@@ -95,6 +101,7 @@ return array(
 	'admin_username' => 'user',
 
 	'admin_password' => 'password',
+	
 	'real_primary_group' => true, // Returns the primary group (an educated guess).
 
 	'use_ssl' => true, // If TLS is true this MUST be false.
@@ -102,13 +109,13 @@ return array(
 	'use_tls' => false, // If SSL is true this MUST be false.
 
 	'recursive_groups' => true,
-);
+];
 ```
 
 Usage
 ======
 
-$guarded is now defaulted to all so to use a model you must change to `$guarded = array()`. If you store Roles or similar sensitive information make sure that you add that to the guarded array.
+$guarded is now defaulted to all so to use a model you must change to `$guarded = []`. If you store Roles or similar sensitive information make sure that you add that to the guarded array.
 
 Use of `Auth` is the same as with the default service provider.
 
