@@ -29,7 +29,7 @@ This will follow releases similar to how Laravel itself manages releases. When L
 | 5.0.x 		  | ~2.0	 	    | abandon 	 	 |
 | 4.x 			  | ~1.0	 	    | abandon		 |
 
-Version 2.1 requires PHP 5.5+. If you are using Laravel 5.0 which supports PHP 5.4 you can still use ~2.0. However, this version won't get any updates.
+Version 2.1 requires PHP 5.5+. If you are using Laravel 5.0 which supports PHP 5.4 you can still use ~2.0. However, this version won't get updates.
 
 Laravel 5.1 / 5.0
 ---------
