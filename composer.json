@@ -1,11 +1,19 @@
 {
     "name": "strebl/l5-ldap-auth",
     "description": "Laravel 5 Active Directory LDAP Authentication driver",
-    "keywords": ["laravel", "L5", "LDAP", "Authentication", "Laravel 5"],
+    "keywords": [
+        "laravel",
+        "L5",
+        "LDAP",
+        "Authentication",
+        "Laravel 5"
+    ],
+    "license": "MIT",
     "authors": [
         {
             "name": "Manuel Strebel",
-            "email": "manuel_st@msn.com"
+            "email": "manuel_st@msn.com",
+            "role": "Developer"
         },
         {
             "name": "Cody Covey",
@@ -26,5 +34,8 @@
         "psr-4": {
             "Ccovey\\LdapAuth\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
