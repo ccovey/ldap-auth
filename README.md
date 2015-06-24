@@ -85,17 +85,18 @@ and replace it with
 
 This tells Laravel to use the service provider from the vendor folder.
 
-You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `config/auth.php` and change driver to `ldap`
+You also need to direct Auth to use the ldap driver instead of Eloquent or Database, edit `app/config/auth.php` and change driver to `ldap`
 
 Configuration
 =============
-To specify the username field to be used in `app/config/auth.php` set a key / value pair `'username_field' => 'fieldname'` This will default to `username` if you don't provide one.
+To specify the username field to be used in `config/auth.php` (Laravel 4: `app/config/auth.php`) set a key / value pair `'username_field' => 'fieldname'` This will default to `username` if you don't provide one.
 
-To set up your adLDAP for connections to your domain controller, create a file app/config/adldap.php This will provide all the configuration values for your connection. For all configuration options an array like the one below should be provided.
+To set up your adLDAP for connections to your domain controller, create a file `config/adldap.php` (Laravel 4: `app/config/adldap.php`) This will provide all the configuration values for your connection. For all configuration options an array like the one below should be provided.
 
-It is important to note that the only required options are `account_suffix`, `base_dn`, and `domain_controllers`The others provide either security or more information. If you don't want to use the others simply delete them.
+It is important to note that the only required options are `account_suffix`, `base_dn`, and `domain_controllers`. The others provide either security or more information. If you don't want to use the others simply delete them.
 
 ```php
+// Example adldap.php file.
 return [
 	'account_suffix' => "@domain.local",
 
@@ -126,7 +127,7 @@ Use of `Auth` is the same as with the default service provider.
 
 By Default this will have the `username (samaccountname)`, `displayname`, `primary group`, as well as all groups user is a part of
 
-To edit what is returned you can specify in `config/auth.php` under the `fields` key.
+To edit what is returned you can specify in `config/auth.php` (Laravel 4: `app/config/auth.php`) under the `fields` key.
 
 For more information on what fields from AD are available to you visit http://goo.gl/6jL4V
 
