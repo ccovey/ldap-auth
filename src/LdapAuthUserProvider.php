@@ -259,15 +259,21 @@ class LdapAuthUserProvider implements UserProvider
     protected function getAllGroups($groups)
     {
         $grps = '';
+
         if (!is_null($groups)) {
-            if (!is_array($groups)) {
-                $groups = explode(',', $groups);
-            }
-            foreach ($groups as $k => $group) {
-                $splitGroups = explode(',', $group);
-                foreach ($splitGroups as $splitGroup) {
-                    if (substr($splitGroup, 0, 3) !== 'DC=') {
-                        $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+            if($this->ad->getRecursiveGroups()) {
+                $grps = $groups;
+            } else {
+                if (!is_array($groups)) {
+                    $groups = explode(',', $groups);
+                }
+
+                foreach ($groups as $k => $group) {
+                    $splitGroups = explode(',', $group);
+                    foreach ($splitGroups as $splitGroup) {
+                        if (substr($splitGroup, 0, 3) == 'CN=') {
+                            $grps[substr($splitGroup, '3')] = substr($splitGroup, '3');
+                        }
                     }
                 }
             }
