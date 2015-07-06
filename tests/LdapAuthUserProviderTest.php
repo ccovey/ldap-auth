@@ -155,6 +155,22 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         ], $user->retrieveByID('strebel')->groups);
     }
 
+    public function testGroupReturnsEmptyStringIfAUserHasNoGroups()
+    {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
+
+        $infoCollection = $this->getLdapInfoCollection();
+        $infoCollection->memberof = null;
+
+        $this->ad->shouldReceive('infoCollection')
+                 ->once()->with($this->ident, ['*'])->andReturn($infoCollection);
+
+        $user = $this->getProvider($this->ad, null);
+
+        $this->assertEquals('', $user->retrieveByID('strebel')->groups);
+    }
+
     protected function getProvider($conn, $model = null)
     {
         return $this->getMock(Ccovey\LdapAuth\LdapAuthUserProvider::class,
