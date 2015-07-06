@@ -20,11 +20,10 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $this->ad->shouldReceive('user')->atLeast(1)
                  ->andReturn($this->ad);
 
-        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
-                 ->andReturn(false);
-
         $this->config = [
-            'fields'   => [],
+            'fields'   => [
+                'groups' => 'groups'
+            ],
             'userlist' => false,
             'group'    => [],
         ];
@@ -37,6 +36,9 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
     public function testRetrieveByIDWithoutModelReturnsLdapUser()
     {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
+
         $this->ad->shouldReceive('infoCollection')
             ->once()->with($this->ident, ['*'])->andReturn(false);
 
@@ -56,6 +58,9 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
     public function testRetrieveByIDWithModelAndNoUserReturnsNull()
     {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
+
         $this->ad->shouldReceive('infoCollection')
             ->once()->with($this->ident, ['*'])->andReturn(false);
         $user = $this->getProvider($this->ad, User::class);
@@ -74,8 +79,11 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
     public function testRetrieveByIDWithModelAndLdapInfo()
     {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
+
         $this->ad->shouldReceive('infoCollection')
-            ->once()->with($this->ident, ['*'])->andReturn($this->getLdapInfo());
+            ->once()->with($this->ident, ['*'])->andReturn($this->getLdapInfoCollection());
 
         $user = $this->getProvider($this->ad, User::class);
 
@@ -109,13 +117,51 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validate);
     }
 
+    public function testGroupParsingWithoutRecursiveGroups()
+    {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(false);
+
+        $this->ad->shouldReceive('infoCollection')
+                 ->once()->with($this->ident, ['*'])->andReturn($this->getLdapInfoCollection());
+
+        $user = $this->getProvider($this->ad, null);
+
+        $this->assertEquals([
+            'gg_test_bms_lehrer' => 'gg_test_bms_lehrer',
+            'gg_test_gdl_lehrer' => 'gg_test_gdl_lehrer',
+        ], $user->retrieveByID('strebel')->groups);
+    }
+
+    public function testGroupParsingWithRecursiveGroups()
+    {
+        $this->ad->shouldReceive('getRecursiveGroups')->atLeast(1)
+                 ->andReturn(true);
+
+        $this->ad->shouldReceive('info')
+                 ->once()->with($this->ident, ['*'])->andReturn($this->getLdapInfo());
+
+        $this->ad->shouldReceive('groups')
+                 ->once()->with($this->ident)->andReturn([
+                'gg_test_bms_lehrer',
+                'gg_test_gdl_lehrer',
+            ]);
+
+        $user = $this->getProvider($this->ad, null);
+
+        $this->assertEquals([
+            'gg_test_bms_lehrer',
+            'gg_test_gdl_lehrer',
+        ], $user->retrieveByID('strebel')->groups);
+    }
+
     protected function getProvider($conn, $model = null)
     {
         return $this->getMock(Ccovey\LdapAuth\LdapAuthUserProvider::class,
             ['createModel'], [$conn, $this->config, $model]);
     }
 
-    protected function getLdapInfo()
+    protected function getLdapInfoCollection()
     {
         $info = new stdClass();
 
@@ -125,7 +171,32 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
         $info->distinguishedname = 'DC=LDAP,OU=AUTH,OU=FIRST GROUP';
 
-        $info->memberof = [];
+        $info->memberof = [
+            "CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int",
+            "CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int"
+        ];
+
+        return $info;
+    }
+
+    protected function getLdapInfo()
+    {
+        $info = [];
+
+        $info['samaccountname']['count'] = 1;
+        $info['samaccountname'][0] = 'strebel';
+
+        $info['displayName']['count'] = 1;
+        $info['displayName'][0] = 'Manuel Strebel';
+
+        $info['distinguishedname']['count'] = 1;
+        $info['distinguishedname'][0] = 'DC=LDAP,OU=AUTH,OU=FIRST GROUP';
+
+        $info['memberof']['count'] = 2;
+        $info['memberof'] = [
+            "CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int",
+            "CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int"
+        ];
 
         return $info;
     }
