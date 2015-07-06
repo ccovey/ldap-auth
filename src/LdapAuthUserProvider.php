@@ -265,7 +265,7 @@ class LdapAuthUserProvider implements UserProvider
         }
 
         if ($this->ad->getRecursiveGroups()) {
-            return $groups;
+            return array_combine($groups, $groups);
         }
 
         if (!is_array($groups)) {

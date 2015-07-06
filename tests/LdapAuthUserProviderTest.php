@@ -150,8 +150,8 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $user = $this->getProvider($this->ad, null);
 
         $this->assertEquals([
-            'gg_test_bms_lehrer',
-            'gg_test_gdl_lehrer',
+            'gg_test_bms_lehrer' => 'gg_test_bms_lehrer',
+            'gg_test_gdl_lehrer' => 'gg_test_gdl_lehrer',
         ], $user->retrieveByID('strebel')->groups);
     }
 
