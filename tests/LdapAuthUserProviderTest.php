@@ -22,7 +22,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
         $this->config = [
             'fields'   => [
-                'groups' => 'groups'
+                'groups' => 'groups',
             ],
             'userlist' => false,
             'group'    => [],
@@ -188,8 +188,8 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $info->distinguishedname = 'DC=LDAP,OU=AUTH,OU=FIRST GROUP';
 
         $info->memberof = [
-            "CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int",
-            "CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int"
+            'CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int',
+            'CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int',
         ];
 
         return $info;
@@ -210,8 +210,8 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
 
         $info['memberof']['count'] = 2;
         $info['memberof'] = [
-            "CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int",
-            "CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int"
+            'CN=gg_test_bms_lehrer,OU=Groups,OU=BMS,OU=gibb-Test,DC=gibb,DC=int',
+            'CN=gg_test_gdl_lehrer,OU=Groups,OU=GDL,OU=gibb-Test,DC=gibb,DC=int',
         ];
 
         return $info;
