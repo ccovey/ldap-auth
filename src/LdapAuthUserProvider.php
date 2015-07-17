@@ -246,7 +246,7 @@ class LdapAuthUserProvider implements UserProvider
     {
         $groups = explode(',', $groupList);
 
-        return substr($groups[1], '3');
+        return isset($groups[1]) ? substr($groups[1], '3') : null;
     }
 
     /**
