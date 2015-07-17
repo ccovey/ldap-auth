@@ -23,6 +23,7 @@ class LdapAuthUserProviderTest extends PHPUnit_Framework_TestCase
         $this->config = [
             'fields'   => [
                 'groups' => 'groups',
+                'primarygroup' => 'primarygroup',
             ],
             'userlist' => false,
             'group'    => [],
