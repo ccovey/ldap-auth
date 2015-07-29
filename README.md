@@ -29,12 +29,12 @@ This will follow releases similar to how Laravel itself manages releases. When L
 
 | Laravel Version | Package Version | Package Status |
 |-----------------|-----------------|----------------| 
-| 5.1.x			  | ~2.1	 	    | maintaned 	 |
-| 5.0.x 		  | ~2.1	 	    | maintaned 	 |
-| 5.0.x 		  | ~2.0	 	    | abandon 	 	 |
-| 4.x 			  | ~1.0	 	    | abandon		 |
+| 5.1.x			  | 2.1.*	 	    | maintaned 	 |
+| 5.0.x 		  | 2.1.*	 	    | maintaned 	 |
+| 5.0.x 		  | 2.0.*	 	    | abandon 	 	 |
+| 4.x 			  | 1.0.*	 	    | abandon		 |
 
-Version 2.1 requires PHP 5.5+. If you are using Laravel 5.0 which supports PHP 5.4 you can still use ~2.0. However, this version won't get updates.
+Version 2.1 requires PHP 5.5+. If you are using Laravel 5.0 which supports PHP 5.4 you can still use 2.0.*. However, this version won't get updates.
 
 Laravel 5.1 / 5.0
 ---------
@@ -42,7 +42,7 @@ Laravel 5.1 / 5.0
 To install this package pull it in through Composer.
 
 ```bash
-composer require strebl/l5-ldap-auth:~2.1
+composer require strebl/l5-ldap-auth:2.1.*
 ```
 
 After Composer is done, you need to tell your application to use the LDAP service provider.
@@ -70,7 +70,7 @@ Laravel 4
 To install this package pull it in through Composer.
 
 ```bash
-composer require strebl/l5-ldap-auth:~1.0
+composer require strebl/l5-ldap-auth:1.0.*
 ```
 
 After Composer is done, you need to tell your application to use the LDAP service provider.
