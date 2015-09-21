@@ -47,13 +47,13 @@ composer require strebl/l5-ldap-auth:2.1.*
 
 After Composer is done, you need to tell your application to use the LDAP service provider.
 
-Open `config/app.php` and find
-
-`Illuminate\Auth\AuthServiceProvider::class`
-
-and replace it with
+Open `config/app.php` and add the service provider
 
 `Ccovey\LdapAuth\LdapAuthServiceProvider::class`
+
+after
+
+`Illuminate\Auth\AuthServiceProvider::class`
 
 This tells Laravel to use the service provider from the vendor folder.
 
