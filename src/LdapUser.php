@@ -19,6 +19,7 @@ class LdapUser extends Model implements UserContract
     {
         $this->attributes = $attributes;
     }
+
     /**
      * Get the unique identifier for the user.
      *
