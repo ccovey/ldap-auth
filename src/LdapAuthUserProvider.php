@@ -162,7 +162,7 @@ class LdapAuthUserProvider implements UserProvider
      */
     public function validateCredentials(UserContract $user, array $credentials)
     {
-        return $this->ad->authenticate($credentials['username'], $credentials['password']);
+        return $this->ad->authenticate($this->getUsernameField(), $credentials['password']);
     }
 
     /**
