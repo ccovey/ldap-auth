@@ -6,7 +6,7 @@
  */
 
 /**
- * Description of TestThings
+ * Description of TestThings.
  *
  * @author cody
  */
@@ -17,5 +17,3 @@ class TestThings extends PHPUnit_Framework_TestCase
         $this->assertTrue(true);
     }
 }
-
-?>
