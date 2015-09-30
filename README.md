@@ -29,8 +29,8 @@ This will follow releases similar to how Laravel itself manages releases. When L
 
 | Laravel Version | Package Version | Package Status |
 |-----------------|-----------------|----------------| 
-| 5.1.x			  | 2.1.*	 	    | maintaned 	 |
-| 5.0.x 		  | 2.1.*	 	    | maintaned 	 |
+| 5.1.x			  | 2.1.*	 	    | maintained 	 |
+| 5.0.x 		  | 2.1.*	 	    | maintained 	 |
 | 5.0.x 		  | 2.0.*	 	    | abandon 	 	 |
 | 4.x 			  | 1.0.*	 	    | abandon		 |
 
